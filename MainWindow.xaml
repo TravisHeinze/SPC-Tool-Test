@@ -3,23 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:SPC_Tool"
         mc:Ignorable="d"
-        Title="SPC Viewer" Height="565.757" Width="690.595">
-
+        Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="439" Margin="10,86,0,0" VerticalAlignment="Top" Width="663">
-            <lvc:CartesianChart x:Name="spcChart1" Series="{Binding DataCollection}" DisableAnimations="True">
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Sales"></lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Month" Labels="{Binding Labels}"></lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-            </lvc:CartesianChart>
-        </Border>
-        <Label x:Name="label" Content="SPC Chart 1" HorizontalAlignment="Left" Margin="294,10,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboDataSets" HorizontalAlignment="Left" Margin="231,41,0,0" VerticalAlignment="Top" Width="195" Height="23" SelectionChanged="ComboDataSets_SelectionChanged"/>
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="772">
+            <TabItem Header="Dashboard">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Item">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>
