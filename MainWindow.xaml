@@ -21,5 +21,6 @@
         </Border>
         <Label x:Name="label" Content="SPC Chart 1" HorizontalAlignment="Left" Margin="294,10,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="comboDataSets" HorizontalAlignment="Left" Margin="231,41,0,0" VerticalAlignment="Top" Width="195" Height="23" SelectionChanged="ComboDataSets_SelectionChanged"/>
+        <Button x:Name="buttonDataEntry" Content="Enter Data" HorizontalAlignment="Left" Margin="549,44,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDataEntry_Click"/>
     </Grid>
 </Window>

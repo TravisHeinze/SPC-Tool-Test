@@ -26,6 +26,7 @@ namespace SPC_Tool
         /// List of varibles needed for contorl chart. Made public to
         /// access all all functions.
         /// </ChartVariables>
+
         public LineSeries spcUCL = new LineSeries
         {
             Title = "UCL",
@@ -80,6 +81,8 @@ namespace SPC_Tool
             CreateDataset();
         }
 
+        
+
         public void CreateDataset()
         {
             
@@ -127,8 +130,12 @@ namespace SPC_Tool
 
         public SeriesCollection DataCollection { get; set; }
         public string[] Labels { get; set; }
-        public Func<double, string> YFormatter { get; set; }
 
+        private void ButtonDataEntry_Click(object sender, RoutedEventArgs e)
+        {
+            DataEntry DataWindow = new DataEntry();
+            DataWindow.Show();
+        }
     }
 
 }
