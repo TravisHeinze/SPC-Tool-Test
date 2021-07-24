@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:SPC_Tool"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        
         <Style x:Key="RoundButtoneTemplate" TargetType="Button">
             <Setter Property="Background" Value="LightSeaGreen" />
             <Setter Property="Foreground" Value="White" />
@@ -11,13 +12,28 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
-                                
-                            </ContentPresenter>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="ComboBoxTemplate" TargetType="ComboBox">
+            <Setter Property="Background" Value="BlueViolet" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness ="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+        
     </Application.Resources>
+
 </Application>

@@ -6,21 +6,50 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:SPC_Tool"
         mc:Ignorable="d"
-        Title="SPC Viewer" Height="565.757" Width="690.595">
+        Title="Main Window" Height="500" Width="800">
 
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="439" Margin="10,86,0,0" VerticalAlignment="Top" Width="663">
-            <lvc:CartesianChart x:Name="spcChart1" Series="{Binding DataCollection}" DisableAnimations="True">
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Sales"></lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Month" Labels="{Binding Labels}"></lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-            </lvc:CartesianChart>
-        </Border>
-        <Label x:Name="label" Content="SPC Chart 1" HorizontalAlignment="Left" Margin="294,10,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboDataSets" HorizontalAlignment="Left" Margin="231,41,0,0" VerticalAlignment="Top" Width="195" Height="23" SelectionChanged="ComboDataSets_SelectionChanged"/>
-        <Button x:Name="buttonDataEntry" Content="Enter Data" HorizontalAlignment="Left" Margin="549,44,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDataEntry_Click"/>
+
+        <Grid.ColumnDefinitions>
+
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" x:Name="rowTitle"></RowDefinition>
+            <RowDefinition Height="300" x:Name="rowMain"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label x:Name="textTitle" 
+               Content="CSO SPC Tool" 
+               FontSize="50"
+               HorizontalAlignment="Center" 
+               VerticalAlignment="Center"
+               FontFamily="Good Times"/>
+
+        <Button x:Name="buttonData" 
+                Content="Data Entry" 
+                Style="{StaticResource RoundButtoneTemplate}" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Margin="0,0,300,0" 
+                Width="200"
+                Height="70"
+                FontSize="35"
+                Background="MediumSeaGreen" 
+                Grid.Row="1" Click="ButtonData_Click" />
+
+        <Button x:Name="buttonCharts" 
+                Content="View Charts" 
+                Style="{StaticResource RoundButtoneTemplate}" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Margin="300,0,0,0" 
+                Width="200"
+                Height="70"
+                FontSize="35"
+                Background="CornflowerBlue" 
+                Grid.Row="1" Click="ButtonCharts_Click" />
+
     </Grid>
+
 </Window>
