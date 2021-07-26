@@ -28,7 +28,7 @@
 
         <Button x:Name="buttonData" 
                 Content="Data Entry" 
-                Style="{StaticResource RoundButtoneTemplate}" 
+                Style="{StaticResource HighlightButton}" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
                 Margin="0,0,300,0" 

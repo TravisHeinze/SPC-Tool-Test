@@ -84,9 +84,9 @@ namespace SPC_Tool
         public void CreateDataset()
         {
             spcCharts = SPCData.AsEnumerable()
-                .Select(x => x.Field<string>("SPC_Plan"))
-                .Distinct()
-                .ToList();
+                    .Select(x => x.Field<string>("SPC_Plan"))
+                    .Distinct()
+                    .ToList();
 
             spcUCL.Values = new ChartValues<double> { 4, 4, 4, 4, 4 };
             spcLCL.Values = new ChartValues<double> { 2, 2, 2, 2, 2, };
@@ -102,16 +102,29 @@ namespace SPC_Tool
                 spcUCL, spcUSL, spcLCL, spcLSL, spcCenterLine, spcDataSet
             };
 
-            Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" };
-
             DataContext = this;
         }
 
         public void UpdateGraph()
         {
-            List<double> holder = new List<double>();
-            ChartValues<double> convert = new ChartValues<double>();           
+            var SPC_Data = (from x in SPCData.AsEnumerable()
+                          where x.Field<string>("SPC_Plan") == comboCharts.SelectedItem.ToString()
+                          select new SPC_List_Data
+                          {
+                              UCL = double.Parse(x.Field<string>("UCL")),
+                              LCL = double.Parse(x.Field<string>("LCL")),
+                              USL = double.Parse(x.Field<string>("USL")),
+                              LSL = double.Parse(x.Field<string>("LSL")),
+                              CL = double.Parse(x.Field<string>("CL")),
+                              Data = double.Parse(x.Field<string>("Data_Entry"))
+                          }).ToList();
 
+            spcUCL.Values = new ChartValues<double>(SPC_Data.Select(x => x.UCL).ToList());
+            spcLCL.Values = new ChartValues<double>(SPC_Data.Select(x => x.LCL).ToList());
+            spcUSL.Values = new ChartValues<double>(SPC_Data.Select(x => x.USL).ToList());
+            spcLSL.Values = new ChartValues<double>(SPC_Data.Select(x => x.LSL).ToList());
+            spcCenterLine.Values = new ChartValues<double>(SPC_Data.Select(x => x.CL).ToList());
+            spcDataSet.Values = new ChartValues<double>(SPC_Data.Select(x => x.Data).ToList());
         }
 
         private void ComboDataSets_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -121,6 +134,18 @@ namespace SPC_Tool
 
         public List<string> spcCharts { get; set; }
         public SeriesCollection DataCollection { get; set; }
-        public string[] Labels { get; set; }
     }
+
+    public class SPC_List_Data
+    {
+        //List to collect all contol, spec, and data 
+        public double UCL { get; set; }
+        public double LCL { get; set; }
+        public double USL { get; set; }
+        public double LSL { get; set; }
+        public double CL { get; set; }
+        public double Data { get; set; }
+
+    }
+
 }
