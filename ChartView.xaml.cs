@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
+using System.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -70,18 +70,23 @@ namespace SPC_Tool
             StrokeThickness = 4
         };
 
-        public ChartView()
+        DataTable SPCLimits = new DataTable();
+        DataTable SPCData = new DataTable();
+
+        public ChartView(DataTable SPCLimits_Import, DataTable SPCData_Import)
         {
             InitializeComponent();
-
-            comboDataSets.Items.Add("Series 1");
-            comboDataSets.Items.Add("Series 2");
-
+            SPCLimits = SPCLimits_Import;
+            SPCData = SPCData_Import;
             CreateDataset();
         }
 
         public void CreateDataset()
         {
+            spcCharts = SPCData.AsEnumerable()
+                .Select(x => x.Field<string>("SPC_Plan"))
+                .Distinct()
+                .ToList();
 
             spcUCL.Values = new ChartValues<double> { 4, 4, 4, 4, 4 };
             spcLCL.Values = new ChartValues<double> { 2, 2, 2, 2, 2, };
@@ -104,19 +109,8 @@ namespace SPC_Tool
 
         public void UpdateGraph()
         {
-            List<double> DataOne = new List<double> { 4.2, 3.8, 1.5, 2.2, 2.9, };
-            List<double> DataTwo = new List<double> { 1.5, 2.1, 4.9, 3.3, 2.7, };
-
-            if (comboDataSets.SelectedItem.ToString() == "Series 1")
-            {
-                spcDataSet.Title = "Series 1";
-                spcDataSet.Values = new ChartValues<double>(DataOne);
-            }
-            else
-            {
-                spcDataSet.Title = "Series 2";
-                spcDataSet.Values = new ChartValues<double>(DataTwo);
-            }
+            List<double> holder = new List<double>();
+            ChartValues<double> convert = new ChartValues<double>();           
 
         }
 
@@ -125,6 +119,7 @@ namespace SPC_Tool
             UpdateGraph();
         }
 
+        public List<string> spcCharts { get; set; }
         public SeriesCollection DataCollection { get; set; }
         public string[] Labels { get; set; }
     }

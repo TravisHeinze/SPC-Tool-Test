@@ -19,13 +19,15 @@
             </lvc:CartesianChart>
         </Border>
 
-        <ComboBox x:Name="comboDataSets" 
+        <ComboBox x:Name="comboCharts" 
                   HorizontalAlignment="Left" 
                   VerticalAlignment="Top" 
-                  Style="{StaticResource ComboBoxTemplate}"
                   Margin="233,44,0,0" 
                   Width="195" 
                   Height="23" 
+                  ItemsSource="{Binding spcCharts}"
+                  IsTextSearchEnabled ="True"
+                  IsEditable="True"
                   SelectionChanged="ComboDataSets_SelectionChanged"/>
 
     </Grid>

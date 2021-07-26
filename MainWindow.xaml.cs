@@ -21,18 +21,21 @@ namespace SPC_Tool
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+
     public partial class MainWindow : Window
     {
+        DataTable SPCLimits = new DataTable();
+        DataTable SPCData = new DataTable();
+
         public MainWindow()
         {
-            Loader MainLoader = new Loader();
-            MainLoader.Show();
+            Loader MainLoader = new Loader(SPCLimits, SPCData);
             InitializeComponent();
         }
 
         private void ButtonCharts_Click(object sender, RoutedEventArgs e)
         {
-            ChartView ChartWindow = new ChartView();
+            ChartView ChartWindow = new ChartView(SPCLimits, SPCData);
             ChartWindow.Show();
         }
 

@@ -20,18 +20,18 @@ namespace SPC_Tool
     /// </summary>
     public partial class Loader : Window
     {
-        string connString;
-        DataTable SPCLimits = new DataTable();
-
-        public Loader()
+        public Loader(DataTable SPCLimits, DataTable SPCData)
         {
             InitializeComponent();
-            connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\theinze\\source\\repos\\SPC-Tool-Test\\SPCDatabase.accdb";
-            GetTables();
+            this.Show();
+            GetTables(SPCLimits, SPCData); 
+            this.Close();
         }
 
-        public void GetTables()
+        public void GetTables(DataTable SPCLimits, DataTable SPCData)
         {
+            string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\theinze\\source\\repos\\SPC-Tool-Test\\SPCDatabase.accdb";
+
             using (OleDbConnection conn = new OleDbConnection(connString))
             {
                 OleDbCommand cmd = new OleDbCommand("SELECT * FROM SPCLimits", conn);
@@ -41,6 +41,17 @@ namespace SPC_Tool
                 OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
                 adapter.Fill(SPCLimits);
             }
+
+            using (OleDbConnection conn = new OleDbConnection(connString))
+            {
+                OleDbCommand cmd = new OleDbCommand("SELECT * FROM SPCDatabase", conn);
+
+                conn.Open();
+
+                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                adapter.Fill(SPCData);
+            }
+
         }
     }
 }

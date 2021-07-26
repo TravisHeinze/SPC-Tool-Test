@@ -33,12 +33,13 @@
                Margin="0,0,0,0" 
                Grid.Row="1"/>
 
-        <ProgressBar HorizontalAlignment="Center" 
+        <ProgressBar x:Name="loaderProgress"
+                     HorizontalAlignment="Center" 
                      VerticalAlignment="Center"
-                     Height="38" 
+                     Height="40" 
                      Margin="0,100,0,0" 
                      Grid.Row="1" 
-                     Width="384"/>
+                     Width="400"/>
     </Grid>
     
 </Window>
