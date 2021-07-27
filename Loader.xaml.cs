@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Data.OleDb;
+using System.Data.Odbc;
 
 namespace SPC_Tool
 {
@@ -24,32 +24,58 @@ namespace SPC_Tool
         {
             InitializeComponent();
             this.Show();
-            GetTables(SPCLimits, SPCData); 
+            GetTablesODBC(SPCLimits, SPCData);
             this.Close();
         }
 
-        public void GetTables(DataTable SPCLimits, DataTable SPCData)
+        public void GetTablesODBC(DataTable SPCLimits, DataTable SPCData)
         {
-            string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\theinze\\source\\repos\\SPC-Tool-Test\\SPCDatabase.accdb";
+            TestDataBase();
 
-            using (OleDbConnection conn = new OleDbConnection(connString))
+            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
+                @"Dbq=\\tekfs6.central.tektronix.net\wce\\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
+
+            string sqlString = "SELECT * FROM SPCLimits";
+            string sqlstring2 = "SELECT * FROM SPCDatabase";
+
+            try
             {
-                OleDbCommand cmd = new OleDbCommand("SELECT * FROM SPCLimits", conn);
+                using (OdbcConnection myConnection = new OdbcConnection(connString))
+                {
+                    OdbcCommand cmd = new OdbcCommand(sqlString, myConnection);
+                    OdbcCommand cmd2 = new OdbcCommand(sqlstring2, myConnection);
 
-                conn.Open();
+                    myConnection.Open();
 
-                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
-                adapter.Fill(SPCLimits);
+                    OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
+                    OdbcDataAdapter adapter2 = new OdbcDataAdapter(cmd2);
+                    adapter.Fill(SPCLimits);
+                    adapter2.Fill(SPCData);
+                    myConnection.Close();
+                }
+            }
+            catch(OdbcException oex)
+            {
+                MessageBox.Show(oex.ToString());
             }
 
-            using (OleDbConnection conn = new OleDbConnection(connString))
+        }
+
+        public void TestDataBase()
+        {
+            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
+                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
+
+            OdbcConnection testConn = new OdbcConnection(connString);
+            try
             {
-                OleDbCommand cmd = new OleDbCommand("SELECT * FROM SPCDatabase", conn);
-
-                conn.Open();
-
-                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
-                adapter.Fill(SPCData);
+                testConn.Open();
+                testConn.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Failed to connect to database. Error " + ex.ToString());
+                this.Close();
             }
 
         }
