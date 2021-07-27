@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Data.OleDb;
+using System.Data.Odbc;
 
 namespace SPC_Tool
 {
@@ -20,22 +20,24 @@ namespace SPC_Tool
     /// </summary>
     public partial class DataEntry : Window
     {
-        OleDbConnection con = new OleDbConnection();
         public DataEntry()
         {
             InitializeComponent();
-            con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\theinze\\source\\repos\\SPC-Tool-Test\\SPCDatabase.accdb");
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            OleDbCommand cmd = con.CreateCommand();
-            con.Open();
-            cmd.CommandText = "Insert into SPCDatabase(SPC_Plan, Data_Entry)Values('" + textBoxPlan.Text + "','" + textBoxData.Text + "')";
-            cmd.Connection = con;
-            cmd.ExecuteNonQuery();
-            MessageBox.Show("Record Submitted", "Congrats");
-            con.Close();
+            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
+                         @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
+
+            OdbcConnection conn = new OdbcConnection(connString);
+            OdbcCommand comd = conn.CreateCommand();
+            conn.Open();
+            comd.CommandText = "Insert into SPCDatabase(SPC_Plan, Data_Entry)Values('" + textBoxPlan.Text + "','" + textBoxData.Text + "')";
+            comd.Connection = conn;
+            comd.ExecuteNonQuery();
+            conn.Close();
+            MessageBox.Show("Data Submitted!");
             this.Close();
         }
 
