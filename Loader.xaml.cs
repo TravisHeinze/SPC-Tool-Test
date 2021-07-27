@@ -33,7 +33,7 @@ namespace SPC_Tool
             TestDataBase();
 
             string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                @"Dbq=\\tekfs6.central.tektronix.net\wce\\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
+                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
 
             string sqlString = "SELECT * FROM SPCLimits";
             string sqlstring2 = "SELECT * FROM SPCDatabase";
@@ -58,7 +58,7 @@ namespace SPC_Tool
             {
                 MessageBox.Show(oex.ToString());
             }
-
+            
         }
 
         public void TestDataBase()

@@ -28,7 +28,7 @@ namespace SPC_Tool
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
             string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                         @"Dbq=\\tekfs6.central.tektronix.net\wce\\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
+                         @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
 
             OdbcConnection conn = new OdbcConnection(connString);
             OdbcCommand comd = conn.CreateCommand();
