@@ -11,6 +11,7 @@ using System.IO;
 using System.Collections;
 using System.Data.Odbc;
 using Microsoft.Win32;
+using OracleDriverLib;
 
 namespace SPC_Tool
 {
@@ -21,14 +22,103 @@ namespace SPC_Tool
 
     public partial class Loader : Window
     {
-        public Loader(DataTable SPCLimits, DataTable SPCData)
+        public MainWindow mainWindow;
+        DataTable SPCLimits = new DataTable(); 
+        DataTable SPCData = new DataTable();
+        public string full_name;
+        bool edit_permissions = false;
+
+        public Loader()
         {
-            VerifyDriver();
-            InitializeComponent();
-            this.Show();
-            GetTablesODBC(SPCLimits, SPCData);
-            this.Close();
+            if (VerifyUser())
+            {
+                AssignPermissions();
+                VerifyDriver();
+                InitializeComponent();
+                this.Show();
+                GetTablesODBC(SPCLimits, SPCData);
+                MainWindow mainWindow = new MainWindow(edit_permissions);
+                this.Close();
+                mainWindow.Show();
+            }
+            else
+            {
+                MessageBox.Show("Unauthorized user");
+                Application.Current.Shutdown();
+            }
         }
+
+        public bool VerifyUser()
+        {
+            OracleDriver O = new OracleDriver();
+            DataTable dt = new DataTable();
+            string windows_id = Environment.UserName.ToString().ToUpper();
+            string id_query = "select full_name from APPS.HR_EMPLOYEES where employee_id = (select employee_id from APPS.FND_USER where user_name = '" + windows_id + "')";
+            full_name = null;
+
+            O.run_query(id_query, ref dt);
+
+            foreach (DataRow row in dt.Rows)
+            {
+                foreach (var item in row.ItemArray)
+                {
+                    full_name = item.ToString();
+                }
+            }
+
+            if (full_name != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void AssignPermissions()
+        {
+            DataTable SPCUsers = new DataTable();
+
+            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
+                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
+
+            string user_query = "SELECT * FROM SPCUsers";
+
+            try
+            {
+                using (OdbcConnection myConnection = new OdbcConnection(connString))
+                {
+                    OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
+                    myConnection.Open();
+                    OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
+                    adapter.Fill(SPCUsers);
+                    myConnection.Close();
+                }
+            }
+
+            catch (OdbcException oex)
+            {
+                MessageBox.Show(oex.ToString());
+            }
+
+            var admins = from row in SPCUsers.AsEnumerable()
+                         where row.Field<string>("Permissions") == "Admin"
+                         select row.Field<string>("User");
+
+            var engineers = from row in SPCUsers.AsEnumerable()
+                            where row.Field<string>("Permissions") == "Engineer"
+                            select row.Field<string>("User");
+
+            SetPermissions(admins, engineers);
+        }
+
+        public void SetPermissions(EnumerableRowCollection<string> admins, EnumerableRowCollection<string> engineers)
+        {
+            if(admins.Contains(full_name))
+            {
+                edit_permissions = true;
+            }
+        }
+
 
         public void VerifyDriver()
         {
