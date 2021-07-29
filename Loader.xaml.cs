@@ -116,7 +116,6 @@ namespace SPC_Tool
 
         public void SetPermissions(EnumerableRowCollection<string> admins, EnumerableRowCollection<string> engineers)
         {
-
             if(admins.Contains(full_name))
             {
                 edit_permissions = true;

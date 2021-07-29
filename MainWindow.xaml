@@ -57,7 +57,7 @@
             Margin="694,10,9.6,51.8" 
             Width="90"
             Height="39"
-            Background="MediumSeaGreen" Click="ButtonData_Click" RenderTransformOrigin="0.837,0.021" FontSize="11" Visibility="Hidden" />
+            Background="MediumSeaGreen" Click="ButtonPermissions_Click" RenderTransformOrigin="0.837,0.021" FontSize="11" Visibility="Hidden" />
 
     </Grid>
 

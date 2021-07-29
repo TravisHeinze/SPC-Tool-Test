@@ -1,0 +1,45 @@
+﻿<Window x:Class="SPC_Tool.AccessOperations"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SPC_Tool"
+        mc:Ignorable="d"
+        Title="AccessOperations" Height="450" Width="800">
+    <Grid>
+        <Button x:Name="buttonData" 
+            Content="Add User" 
+            Style="{StaticResource HighlightButton}" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center" 
+            Margin="121,97,472.6,253" 
+            Width="200"
+            Height="70"
+            FontSize="23"
+            Background="MediumSeaGreen" 
+            Click="Add_Click" />
+        <Button x:Name="buttonData_Copy" 
+            Content="Change User Permissions" 
+            Style="{StaticResource HighlightButton}" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center" 
+            Margin="302,258,291.6,92" 
+            Width="200"
+            Height="70"
+            FontSize="16"
+            Background="MediumSeaGreen" 
+            Click="ChangePermissions_Click" />
+        <Button x:Name="buttonData_Copy1" 
+            Content="Remove User" 
+            Style="{StaticResource HighlightButton}" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center" 
+            Margin="485,97,108.6,253" 
+            Width="200"
+            Height="70"
+            FontSize="23"
+            Background="MediumSeaGreen" 
+            Click="Remove_Click" />
+
+    </Grid>
+</Window>

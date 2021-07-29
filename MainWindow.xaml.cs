@@ -47,5 +47,11 @@ namespace SPC_Tool
             DataEntry DataWindow = new DataEntry();
             DataWindow.Show();
         }
+
+        private void ButtonPermissions_Click(object sender, RoutedEventArgs e)
+        {
+            AccessOperations AccessWindow = new AccessOperations();
+            AccessWindow.Show();
+        }
     }
 }
