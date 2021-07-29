@@ -26,7 +26,8 @@ namespace SPC_Tool
 
         private void ChangePermissions_Click(object sender, RoutedEventArgs e)
         {
-
+            ModifyPermissions modifyPermissions = new ModifyPermissions();
+            modifyPermissions.Show();
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -37,7 +38,8 @@ namespace SPC_Tool
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-
+            RemoveUser removeUser = new RemoveUser();
+            removeUser.Show();
         }
     }
 }
