@@ -27,10 +27,13 @@ namespace SPC_Tool
         DataTable SPCLimits = new DataTable();
         DataTable SPCData = new DataTable();
 
-        public MainWindow()
+        public MainWindow(bool edit_permissions)
         {
-            Loader MainLoader = new Loader(SPCLimits, SPCData);
             InitializeComponent();
+            if (edit_permissions)
+            {
+                buttonPermissions.Visibility = Visibility.Visible;
+            }
         }
 
         private void ButtonCharts_Click(object sender, RoutedEventArgs e)

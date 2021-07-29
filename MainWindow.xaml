@@ -49,6 +49,15 @@
                 FontSize="35"
                 Background="CornflowerBlue" 
                 Grid.Row="1" Click="ButtonCharts_Click" />
+        <Button x:Name="buttonPermissions" 
+            Content="Edit Permissions" 
+            Style="{StaticResource HighlightButton}" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center" 
+            Margin="694,10,9.6,51.8" 
+            Width="90"
+            Height="39"
+            Background="MediumSeaGreen" Click="ButtonData_Click" RenderTransformOrigin="0.837,0.021" FontSize="11" Visibility="Hidden" />
 
     </Grid>
 
