@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.IO;
+using System.Collections;
 using System.Data.Odbc;
 using Microsoft.Win32;
 
@@ -43,7 +40,7 @@ namespace SPC_Tool
             {
                 foreach (string name in reg.GetValueNames())
                 {
-                    if (reg.GetValue(name).ToString() == "Microsoft Access Driver (*.mdb, *.accdb)")
+                    if (name == "SPC Access Driver")
                     {
                         driverCheck = true;
                     }
@@ -60,17 +57,12 @@ namespace SPC_Tool
 
         public void GetTablesODBC(DataTable SPCLimits, DataTable SPCData)
         {
-            TestDataBase();
-
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
             string sqlString = "SELECT * FROM SPCLimits";
             string sqlstring2 = "SELECT * FROM SPCDatabase";
 
             try
             {
-                using (OdbcConnection myConnection = new OdbcConnection(connString))
+                using (OdbcConnection myConnection = new OdbcConnection("DSN=SPC Access Driver"))
                 {
                     OdbcCommand cmd = new OdbcCommand(sqlString, myConnection);
                     OdbcCommand cmd2 = new OdbcCommand(sqlstring2, myConnection);
@@ -88,57 +80,55 @@ namespace SPC_Tool
             {
                 MessageBox.Show(oex.ToString());
             }
-            
-        }
-
-        public void TestDataBase()
-        {
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
-            OdbcConnection testConn = new OdbcConnection(connString);
-            try
-            {
-                testConn.Open();
-                testConn.Close();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Failed to connect to database. Error " + ex.ToString());
-                this.Close();
-            }
         }
 
         public void CreateDSN()
         {
             string ODBC_PATH = "SOFTWARE\\ODBC\\ODBC.INI\\";
             string driverName = "Microsoft Access Driver (*.mdb, *.accdb)";
-            string dsnName = "Test Driver";
-            string description = "This DSN was created from code!";
+            string dsnName = "SPC Access Driver";
+            string description = "Driver needed for SPC tool";
+            string DBQ = @"R:\MfgCommon\SPC Tool\Database\SPCDatabase.accdb";
 
-            string driverPath = @"C:\Program Files\Microsoft Office\root\vfs\ProgramFilesCommonX64\Microsoft Shared\OFFICE16\ACEODBC.DLL";
+
+            string driverPath;
+            string driverPathx64 = @"C:\Program Files\Microsoft Office\root\vfs\ProgramFilesCommonX64\Microsoft Shared\OFFICE16\ACEODBC.DLL";
+            string driverPathx86 = @"C:\Program Files (x86)\Microsoft Office\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE16\ACEODBC.DLL";
+
+            if (File.Exists(driverPathx64))
+            {
+                driverPath = driverPathx64;
+            }
+            else
+            {
+                driverPath = driverPathx86;
+            }
 
             // value to odbc data source         
             var datasourcesKey = Registry.CurrentUser.CreateSubKey(ODBC_PATH + "ODBC Data Sources");
 
             if (datasourcesKey == null)
             {
-                throw new Exception("ODBC Registry key does not exist!!");
+                throw new Exception("ODBC Registry key does not exist!");
             }
 
             datasourcesKey.SetValue(dsnName, driverName);
+            
 
             //It will Create new key in odbc.ini         
             var dsnKey = Registry.CurrentUser.CreateSubKey(ODBC_PATH + dsnName);
 
             if (dsnKey == null)
             {
-                throw new Exception("ODBC Registry key not created!!");
+                throw new Exception("ODBC Registry key not created!");
             }
 
-            dsnKey.SetValue("Description", description);
+            dsnKey.SetValue("DBQ", DBQ);
             dsnKey.SetValue("Driver", driverPath);
-
+            dsnKey.SetValue("Description", description);
+            dsnKey.SetValue("FIL", "MS Access;");
+            dsnKey.SetValue("LastUser", Environment.UserName);
+            dsnKey.SetValue("DriverId", 25);
         }
     }
 }
