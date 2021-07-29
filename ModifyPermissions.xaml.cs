@@ -60,7 +60,6 @@ namespace SPC_Tool
 
             comboBox2.Items.Add("Admin");
             comboBox2.Items.Add("Engineer");
-            comboBox2.Items.Add("Basic");
 
         }
 
