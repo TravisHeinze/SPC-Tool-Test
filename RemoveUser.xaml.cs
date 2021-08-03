@@ -21,8 +21,11 @@ namespace SPC_Tool
     /// </summary>
     public partial class RemoveUser : Window
     {
-        public RemoveUser()
+        public OdbcConnection myConnection;
+
+        public RemoveUser(OdbcConnection myConnection)
         {
+            this.myConnection = myConnection;
             InitializeComponent();
             fill_comboBox();
         }
@@ -31,21 +34,13 @@ namespace SPC_Tool
         {
             DataTable SPCUsers = new DataTable();
 
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
             string user_query = "SELECT * FROM SPCUsers";
 
             try
             {
-                using (OdbcConnection myConnection = new OdbcConnection(connString))
-                {
-                    OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
-                    myConnection.Open();
-                    OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
-                    adapter.Fill(SPCUsers);
-                    myConnection.Close();
-                }
+                OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
+                OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
+                adapter.Fill(SPCUsers);
             }
 
             catch (OdbcException oex)
@@ -62,22 +57,12 @@ namespace SPC_Tool
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
             string user_query = "DELETE FROM SPCUsers WHERE [User] = '" + comboBox1.Text + "'";
 
             try
             {
-                using (OdbcConnection myConnection = new OdbcConnection(connString))
-                {
-
-                    myConnection.Open();
-                    OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
-                    cmd.ExecuteNonQuery();
-
-                    myConnection.Close();
-                }
+                OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
+                cmd.ExecuteNonQuery();
             }
 
             catch (OdbcException oex)

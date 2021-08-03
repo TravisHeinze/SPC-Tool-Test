@@ -21,8 +21,11 @@ namespace SPC_Tool
     /// </summary>
     public partial class ModifyPermissions : Window
     {
-        public ModifyPermissions()
+        public OdbcConnection myConnection;
+
+        public ModifyPermissions(OdbcConnection myConnection)
         {
+            this.myConnection = myConnection;
             InitializeComponent();
             fill_combo_boxes();
         }
@@ -30,22 +33,13 @@ namespace SPC_Tool
         public void fill_combo_boxes()
         {
             DataTable SPCUsers = new DataTable();
-
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
             string user_query = "SELECT * FROM SPCUsers";
 
             try
             {
-                using (OdbcConnection myConnection = new OdbcConnection(connString))
-                {
-                    OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
-                    myConnection.Open();
-                    OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
-                    adapter.Fill(SPCUsers);
-                    myConnection.Close();
-                }
+                OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
+                OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
+                adapter.Fill(SPCUsers);
             }
 
             catch (OdbcException oex)
@@ -65,40 +59,31 @@ namespace SPC_Tool
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
             string user_query = "SELECT * FROM SPCUsers";
 
             try
             {
-                using (OdbcConnection myConnection = new OdbcConnection(connString))
+                OdbcDataAdapter adapter = new OdbcDataAdapter();
+                adapter.SelectCommand = new OdbcCommand(user_query, myConnection);
+                OdbcCommandBuilder builder = new OdbcCommandBuilder(adapter);
+
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet, "SPCUsers");
+
+                int user_idx = 0;
+
+                for(int i = 0; i < dataSet.Tables["SPCUsers"].Rows.Count; i++)
                 {
-                    OdbcDataAdapter adapter = new OdbcDataAdapter();
-                    adapter.SelectCommand = new OdbcCommand(user_query, myConnection);
-                    OdbcCommandBuilder builder = new OdbcCommandBuilder(adapter);
-                    myConnection.Open();
-
-                    DataSet dataSet = new DataSet();
-                    adapter.Fill(dataSet, "SPCUsers");
-
-                    int user_idx = 0;
-
-                    for(int i = 0; i < dataSet.Tables["SPCUsers"].Rows.Count; i++)
+                    if(dataSet.Tables["SPCUsers"].Rows[i]["User"].ToString() == comboBox1.Text)
                     {
-                        if(dataSet.Tables["SPCUsers"].Rows[i]["User"].ToString() == comboBox1.Text)
-                        {
-                            user_idx = i;
-                        }
+                        user_idx = i;
                     }
-
-                    dataSet.Tables["SPCUsers"].Rows[user_idx]["Permissions"] = comboBox2.Text;
-
-                    builder.GetUpdateCommand();
-                    adapter.Update(dataSet, "SPCUsers");
-
-                    myConnection.Close();
                 }
+
+                dataSet.Tables["SPCUsers"].Rows[user_idx]["Permissions"] = comboBox2.Text;
+
+                builder.GetUpdateCommand();
+                adapter.Update(dataSet, "SPCUsers");
             }
 
             catch (OdbcException oex)

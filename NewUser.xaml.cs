@@ -22,49 +22,42 @@ namespace SPC_Tool
     /// </summary>
     public partial class NewUser : Window
     {
-        public NewUser()
+        public OdbcConnection myConnection;
+
+        public NewUser(OdbcConnection myConnection)
         {
+            this.myConnection = myConnection;
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
             string user_query = "SELECT * FROM SPCUsers";
 
             try
             {
-                using (OdbcConnection myConnection = new OdbcConnection(connString))
-                {
-                    OdbcDataAdapter adapter = new OdbcDataAdapter();
-                    adapter.SelectCommand = new OdbcCommand(user_query, myConnection);
-                    OdbcCommandBuilder builder = new OdbcCommandBuilder(adapter);
-                    myConnection.Open();
+                OdbcDataAdapter adapter = new OdbcDataAdapter();
+                adapter.SelectCommand = new OdbcCommand(user_query, myConnection);
+                OdbcCommandBuilder builder = new OdbcCommandBuilder(adapter);
 
-                    DataSet dataSet = new DataSet();
-                    adapter.Fill(dataSet, "SPCUsers");
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet, "SPCUsers");
 
-                    DataRow newRow = dataSet.Tables["SPCUsers"].NewRow();
-                    newRow["User"] = user_id.Text;
-                    newRow["Email"] = user_email.Text;
-                    newRow["Permissions"] = comboBox1.Text;
+                DataRow newRow = dataSet.Tables["SPCUsers"].NewRow();
+                newRow["User"] = user_id.Text;
+                newRow["Email"] = user_email.Text;
+                newRow["Permissions"] = comboBox1.Text;
 
-                    dataSet.Tables["SPCUsers"].Rows.Add(newRow);
+                dataSet.Tables["SPCUsers"].Rows.Add(newRow);
 
-                    builder.GetUpdateCommand();
-                    adapter.Update(dataSet, "SPCUsers");
-
-                    myConnection.Close();
-                }
+                builder.GetUpdateCommand();
+                adapter.Update(dataSet, "SPCUsers");
             }
 
             catch (OdbcException oex)
             {
                 MessageBox.Show(oex.ToString());
             }
-
 
             this.Close();
         }
