@@ -5,33 +5,97 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SPC_Tool"
         mc:Ignorable="d"
-        Title="Data Entry" Height="348.635" Width="473.634">
+        Title="Data Entry" Height="400" Width="750">
     <Grid>
 
+        <Grid.ColumnDefinitions>
+
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" x:Name="rowTitle"></RowDefinition>
+            <RowDefinition Height="290" x:Name="rowMain"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label x:Name="textTitle" 
+               Content="Submit Data" 
+               FontSize="50"
+               HorizontalAlignment="Center" 
+               VerticalAlignment="Center"
+               FontFamily="Good Times"/>
+        
         <Button x:Name="buttonSubmit" 
                 Content="Submit" 
                 Style="{StaticResource RoundButtoneTemplate}" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
-                Margin="262,196,0,0" 
-                Width="75"
-                Height="29"
-                Click="ButtonSubmit_Click" />
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Margin="250,125,0,0" 
+                Width="150"
+                Height="50"
+                FontSize="25"
+                Click="ButtonSubmit_Click"
+                FontFamily="Good Times"
+                Grid.Row="1"/>
 
         <Button x:Name="buttonCacnel" 
                 Content="Cancel" 
                 Style="{StaticResource RoundButtoneTemplate}" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
-                Margin="124,196,0,0" 
-                Width="75"
-                Height="29"
-                Background="Gray" Click="ButtonCacnel_Click"/>
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Margin="0,125,250,0" 
+                Width="150"
+                Height="50"
+                Background="Gray" 
+                Click="ButtonCacnel_Click"
+                FontSize="25"
+                FontFamily="Good Times"
+                Grid.Row="1"/>
 
-        <TextBox x:Name="textBoxPlan" HorizontalAlignment="Left" Height="23" Margin="226,84,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="textBoxData" HorizontalAlignment="Left" Height="23" Margin="226,135,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="labelData" Content="Data Entry" HorizontalAlignment="Left" Margin="124,135,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="labelPlan" Content="Plan" HorizontalAlignment="Left" Margin="136,84,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxPlan" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 Height="30" 
+                 Width="200"
+                 Margin="250,0,0,175" 
+                 TextWrapping="Wrap" 
+                 VerticalContentAlignment="Center"
+                 FontSize="20"
+                 FontFamily="Good Times"
+                 Grid.Row="1"
+                 />
+        
+        <TextBox x:Name="textBoxData" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 Height="30" 
+                 Width="200"
+                 Margin="250,0,0,50" 
+                 TextWrapping="Wrap" 
+                 VerticalContentAlignment="Center"
+                 FontSize="20"
+                 FontFamily="Good Times"
+                 Grid.Row="1"
+                 />
+       
+        <Label x:Name="labelData" 
+               Content="Data Entry" 
+               HorizontalAlignment="Center" 
+               VerticalAlignment="Center"
+               Margin="0,0,250,50" 
+               FontSize="20"
+               FontFamily="Good Times"
+               Grid.Row="1"
+               />
+        
+        <Label x:Name="labelPlan" 
+               Content="Plan" 
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Margin="0,0,175,175" 
+               FontSize="20"
+               FontFamily="Good Times"
+               Grid.Row="1"
+               />
 
     </Grid>
 </Window>

@@ -41,7 +41,12 @@ namespace SPC_Tool
 
         private void ButtonData_Click(object sender, RoutedEventArgs e)
         {
-            DataEntry DataWindow = new DataEntry();
+            var spcCharts = SPCData.AsEnumerable()
+                    .Select(x => x.Field<string>("SPC_Plan"))
+                    .Distinct()
+                    .ToList();
+
+            DataEntry DataWindow = new DataEntry(spcCharts);
             DataWindow.Show();
         }
     }

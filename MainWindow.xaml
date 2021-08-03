@@ -36,7 +36,8 @@
                 Height="70"
                 FontSize="35"
                 Background="MediumSeaGreen" 
-                Grid.Row="1" Click="ButtonData_Click" />
+                Grid.Row="1" 
+                Click="ButtonData_Click" />
 
         <Button x:Name="buttonCharts" 
                 Content="View Charts" 
@@ -48,7 +49,8 @@
                 Height="70"
                 FontSize="35"
                 Background="CornflowerBlue" 
-                Grid.Row="1" Click="ButtonCharts_Click" />
+                Grid.Row="1" 
+                Click="ButtonCharts_Click" />
 
     </Grid>
 

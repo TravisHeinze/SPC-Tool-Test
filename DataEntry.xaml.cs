@@ -20,17 +20,16 @@ namespace SPC_Tool
     /// </summary>
     public partial class DataEntry : Window
     {
-        public DataEntry()
+        public DataEntry(List<string> spcCharts_Import)
         {
             InitializeComponent();
+            spcCharts = spcCharts_Import;
+            textBoxPlan.TextChanged += textBoxPlanOnTextChanged;
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                         @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
-            OdbcConnection conn = new OdbcConnection(connString);
+            OdbcConnection conn = new OdbcConnection("DSN=SPC Access Driver");
             OdbcCommand comd = conn.CreateCommand();
             conn.Open();
             comd.CommandText = "Insert into SPCDatabase(SPC_Plan, Data_Entry)Values('" + textBoxPlan.Text + "','" + textBoxData.Text + "')";
@@ -45,5 +44,33 @@ namespace SPC_Tool
         {
             this.Close();
         }
+
+        private string _currentInput = "";
+        private string _currentSuggestion = "";
+        private string _currentText = "";
+
+        private int _selectionStart;
+        private int _selectionLength;
+   
+        private void textBoxPlanOnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var input = textBoxPlan.Text;
+            if(input.Length > _currentInput.Length && input != _currentSuggestion)
+            {
+                _currentSuggestion = spcCharts.FirstOrDefault(x => x.StartsWith(input));
+                if(_currentSuggestion != null)
+                {
+                    _currentText = _currentSuggestion;
+                    _selectionStart = input.Length;
+                    _selectionLength = _currentSuggestion.Length - input.Length;
+
+                    textBoxPlan.Text = _currentText;
+                    textBoxPlan.Select(_selectionStart, _selectionLength);
+                }
+            }
+        }
+
+        public List<string> spcCharts { get; set; }
+
     }
 }
