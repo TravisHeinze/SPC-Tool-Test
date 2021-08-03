@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
+using System.Data.Odbc;
 
 namespace SPC_Tool
 {
@@ -25,6 +26,8 @@ namespace SPC_Tool
         /// List of varibles needed for contorl chart. Made public to
         /// access all all functions.
         /// </ChartVariables>
+
+        public OdbcConnection myConnection;
 
         public LineSeries spcUCL = new LineSeries
         {
@@ -73,8 +76,9 @@ namespace SPC_Tool
         DataTable SPCLimits = new DataTable();
         DataTable SPCData = new DataTable();
 
-        public ChartView(DataTable SPCLimits_Import, DataTable SPCData_Import)
+        public ChartView(DataTable SPCLimits_Import, DataTable SPCData_Import, OdbcConnection myConnection)
         {
+            this.myConnection = myConnection;
             InitializeComponent();
             SPCLimits = SPCLimits_Import;
             SPCData = SPCData_Import;

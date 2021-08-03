@@ -20,23 +20,20 @@ namespace SPC_Tool
     /// </summary>
     public partial class DataEntry : Window
     {
-        public DataEntry()
+        public OdbcConnection myConnection;
+
+        public DataEntry(OdbcConnection myConnection)
         {
+            this.myConnection = myConnection;
             InitializeComponent();
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            string connString = (@"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-                         @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;");
-
-            OdbcConnection conn = new OdbcConnection(connString);
-            OdbcCommand comd = conn.CreateCommand();
-            conn.Open();
+            OdbcCommand comd = myConnection.CreateCommand();
             comd.CommandText = "Insert into SPCDatabase(SPC_Plan, Data_Entry)Values('" + textBoxPlan.Text + "','" + textBoxData.Text + "')";
-            comd.Connection = conn;
+            comd.Connection = myConnection;
             comd.ExecuteNonQuery();
-            conn.Close();
             MessageBox.Show("Data Submitted!");
             this.Close();
         }
