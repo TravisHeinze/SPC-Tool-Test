@@ -20,22 +20,20 @@ namespace SPC_Tool
     /// </summary>
     public partial class DataEntry : Window
     {
-        public DataEntry(List<string> spcCharts_Import)
+        public OdbcConnection myConnection;
+
+        public DataEntry(OdbcConnection myConnection)
         {
+            this.myConnection = myConnection;
             InitializeComponent();
-            spcCharts = spcCharts_Import;
-            textBoxPlan.TextChanged += textBoxPlanOnTextChanged;
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            OdbcConnection conn = new OdbcConnection("DSN=SPC Access Driver");
-            OdbcCommand comd = conn.CreateCommand();
-            conn.Open();
+            OdbcCommand comd = myConnection.CreateCommand();
             comd.CommandText = "Insert into SPCDatabase(SPC_Plan, Data_Entry)Values('" + textBoxPlan.Text + "','" + textBoxData.Text + "')";
-            comd.Connection = conn;
+            comd.Connection = myConnection;
             comd.ExecuteNonQuery();
-            conn.Close();
             MessageBox.Show("Data Submitted!");
             this.Close();
         }
@@ -44,33 +42,5 @@ namespace SPC_Tool
         {
             this.Close();
         }
-
-        private string _currentInput = "";
-        private string _currentSuggestion = "";
-        private string _currentText = "";
-
-        private int _selectionStart;
-        private int _selectionLength;
-   
-        private void textBoxPlanOnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            var input = textBoxPlan.Text;
-            if(input.Length > _currentInput.Length && input != _currentSuggestion)
-            {
-                _currentSuggestion = spcCharts.FirstOrDefault(x => x.StartsWith(input));
-                if(_currentSuggestion != null)
-                {
-                    _currentText = _currentSuggestion;
-                    _selectionStart = input.Length;
-                    _selectionLength = _currentSuggestion.Length - input.Length;
-
-                    textBoxPlan.Text = _currentText;
-                    textBoxPlan.Select(_selectionStart, _selectionLength);
-                }
-            }
-        }
-
-        public List<string> spcCharts { get; set; }
-
     }
 }

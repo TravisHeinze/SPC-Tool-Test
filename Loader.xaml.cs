@@ -10,7 +10,11 @@ using System.Data;
 using System.IO;
 using System.Collections;
 using System.Data.Odbc;
+using System.Windows.Media.Animation;
 using Microsoft.Win32;
+using System.Threading;
+using System.ComponentModel;
+using OracleDriverLib;
 
 namespace SPC_Tool
 {
@@ -21,13 +25,117 @@ namespace SPC_Tool
 
     public partial class Loader : Window
     {
-        public Loader(DataTable SPCLimits, DataTable SPCData)
+        public MainWindow mainWindow;
+        BackgroundWorker main_thread;
+        DataTable SPCLimits = new DataTable(); 
+        DataTable SPCData = new DataTable();
+        public string full_name;
+        bool edit_permissions = false;
+        OdbcConnection myConnection = new OdbcConnection(connString);
+        public static string connString = @"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
+        @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;";
+
+        public Loader()
         {
-            VerifyDriver();
-            InitializeComponent();
-            this.Show();
-            GetTablesODBC(SPCLimits, SPCData);
+            main_thread = new BackgroundWorker();
+            main_thread.DoWork += MainThread;
+            main_thread.RunWorkerCompleted += ThreadComplete;
+            main_thread.RunWorkerAsync();
+        }
+
+        public bool VerifyUser()
+        {
+            OracleDriver O = new OracleDriver();
+            DataTable dt = new DataTable();
+            string windows_id = Environment.UserName.ToString().ToUpper();
+            string id_query = "select full_name from APPS.HR_EMPLOYEES where employee_id = (select employee_id from APPS.FND_USER where user_name = '" + windows_id + "')";
+            full_name = null;
+
+            O.run_query(id_query, ref dt);
+
+            foreach (DataRow row in dt.Rows)
+            {
+                foreach (var item in row.ItemArray)
+                {
+                    full_name = item.ToString();
+                }
+            }
+
+            if (full_name != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void AssignPermissions()
+        {
+            DataTable SPCUsers = new DataTable();
+            string user_query = "SELECT * FROM SPCUsers";
+
+            try
+            {
+                OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
+                OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
+                adapter.Fill(SPCUsers);
+            }
+
+            catch (OdbcException oex)
+            {
+                MessageBox.Show(oex.ToString());
+            }
+
+            var admins = from row in SPCUsers.AsEnumerable()
+                         where row.Field<string>("Permissions") == "Admin"
+                         select row.Field<string>("User");
+
+            var engineers = from row in SPCUsers.AsEnumerable()
+                            where row.Field<string>("Permissions") == "Engineer"
+                            select row.Field<string>("User");
+
+            SetPermissions(admins, engineers);
+        }
+
+        public void SetPermissions(EnumerableRowCollection<string> admins, EnumerableRowCollection<string> engineers)
+        {
+            if(admins.Contains(full_name))
+            {
+                edit_permissions = true;
+            }
+        }
+
+        private void MainThread(object sender, DoWorkEventArgs e)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                if (VerifyUser())
+                {
+                    myConnection.Open();
+                    AssignPermissions();
+                    VerifyDriver();
+                    //InitializeComponent();
+                    //this.Show();
+                    GetTablesODBC(SPCLimits, SPCData);
+                }
+                else
+                {
+                    MessageBox.Show("Unauthorized user");
+                    Application.Current.Shutdown();
+                }
+            });
+        }
+
+        private void UpdateProgress(object sender, ProgressChangedEventArgs e)
+        {
+            loaderProgress.Value += e.ProgressPercentage;
+        }
+
+        private void ThreadComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow(edit_permissions, myConnection);
             this.Close();
+            mainWindow.Show();
         }
 
         public void VerifyDriver()
@@ -62,19 +170,12 @@ namespace SPC_Tool
 
             try
             {
-                using (OdbcConnection myConnection = new OdbcConnection("DSN=SPC Access Driver"))
-                {
-                    OdbcCommand cmd = new OdbcCommand(sqlString, myConnection);
-                    OdbcCommand cmd2 = new OdbcCommand(sqlstring2, myConnection);
-
-                    myConnection.Open();
-
-                    OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
-                    OdbcDataAdapter adapter2 = new OdbcDataAdapter(cmd2);
-                    adapter.Fill(SPCLimits);
-                    adapter2.Fill(SPCData);
-                    myConnection.Close();
-                }
+                OdbcCommand cmd = new OdbcCommand(sqlString, myConnection);
+                OdbcCommand cmd2 = new OdbcCommand(sqlstring2, myConnection);
+                OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
+                OdbcDataAdapter adapter2 = new OdbcDataAdapter(cmd2);
+                adapter.Fill(SPCLimits);
+                adapter2.Fill(SPCData);
             }
             catch(OdbcException oex)
             {

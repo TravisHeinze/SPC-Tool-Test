@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
-using System.Data.OleDb;
+using System.Data.Odbc;
 
 namespace SPC_Tool
 {
@@ -26,28 +26,47 @@ namespace SPC_Tool
     {
         DataTable SPCLimits = new DataTable();
         DataTable SPCData = new DataTable();
+        public OdbcConnection myConnection;
 
-        public MainWindow()
+        public MainWindow(bool edit_permissions, OdbcConnection myConnection)
         {
-            Loader MainLoader = new Loader(SPCLimits, SPCData);
+            this.Closing += new System.ComponentModel.CancelEventHandler(Close_Window);
+            this.myConnection = myConnection;
             InitializeComponent();
+            if (edit_permissions)
+            {
+                buttonPermissions.Visibility = Visibility.Visible;
+                perm.Content = "Administrator";
+            }
+            else
+            {
+                perm.Content = "Engineer";
+            }
         }
 
         private void ButtonCharts_Click(object sender, RoutedEventArgs e)
         {
-            ChartView ChartWindow = new ChartView(SPCLimits, SPCData);
+            ChartView ChartWindow = new ChartView(SPCLimits, SPCData, myConnection);
             ChartWindow.Show();
         }
 
         private void ButtonData_Click(object sender, RoutedEventArgs e)
         {
-            var spcCharts = SPCData.AsEnumerable()
-                    .Select(x => x.Field<string>("SPC_Plan"))
-                    .Distinct()
-                    .ToList();
-
-            DataEntry DataWindow = new DataEntry(spcCharts);
+            DataEntry DataWindow = new DataEntry(myConnection);
             DataWindow.Show();
         }
+
+        private void ButtonPermissions_Click(object sender, RoutedEventArgs e)
+        {
+            AccessOperations AccessWindow = new AccessOperations(myConnection);
+            AccessWindow.Show();
+        }
+
+        private void Close_Window(object sender, EventArgs e)
+        {
+            myConnection.Close();
+            Application.Current.Shutdown();
+        }
+
     }
 }

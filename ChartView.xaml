@@ -6,7 +6,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:SPC_Tool"
         mc:Ignorable="d"
-        Title="Chart View" Height="584" Width="706">
+        Title="Chart View" Height="584" Width="706" WindowStartupLocation="CenterOwner">
     
     <Grid>
         <Border BorderBrush="Black" 
