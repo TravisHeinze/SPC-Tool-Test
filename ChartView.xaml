@@ -39,7 +39,6 @@
                       Height="25" 
                       ItemsSource="{Binding spcCharts}"
                       IsTextSearchEnabled ="True"
-                      IsEditable="True"
                       SelectionChanged="ComboDataSets_SelectionChanged"
                       Grid.Column="1"
                       Grid.Row="0"

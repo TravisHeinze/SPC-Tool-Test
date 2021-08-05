@@ -9,93 +9,115 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
-
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="75" x:Name="rowTitle"></RowDefinition>
-            <RowDefinition Height="290" x:Name="rowMain"></RowDefinition>
+            <RowDefinition Height="75" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="10" />
         </Grid.RowDefinitions>
 
         <Label x:Name="textTitle" 
-               Content="Submit Data" 
+               Content="Submit" 
                FontSize="50"
-               HorizontalAlignment="Center" 
+               HorizontalAlignment="Right" 
                VerticalAlignment="Center"
-               FontFamily="Good Times"/>
-        
+               FontFamily="Good Times"
+               Grid.Column="1"
+               Grid.Row="0"
+               />
+
+        <Label x:Name="textTitle_Copy" 
+            Content="Data" 
+            FontSize="50"
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Center"
+            FontFamily="Good Times"
+            Grid.Column="3"
+            Grid.Row="0"
+               Margin="0,6.5"
+               />
+
         <Button x:Name="buttonSubmit" 
                 Content="Submit" 
                 Style="{StaticResource RoundButtoneTemplate}" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
-                Margin="250,125,0,0" 
                 Width="150"
                 Height="50"
                 FontSize="25"
                 Click="ButtonSubmit_Click"
                 FontFamily="Good Times"
-                Grid.Row="1"/>
+                Grid.Row="3"
+                Grid.Column="3"
+                />
 
         <Button x:Name="buttonCacnel" 
                 Content="Cancel" 
                 Style="{StaticResource RoundButtoneTemplate}" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
-                Margin="0,125,250,0" 
                 Width="150"
                 Height="50"
                 Background="Gray" 
                 Click="ButtonCacnel_Click"
                 FontSize="25"
                 FontFamily="Good Times"
-                Grid.Row="1"/>
+                Grid.Row="3"
+                Grid.Column="1"
+                />
 
-        <TextBox x:Name="textBoxPlan" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center" 
-                 Height="30" 
-                 Width="200"
-                 Margin="250,0,0,175" 
-                 TextWrapping="Wrap" 
-                 VerticalContentAlignment="Center"
-                 FontSize="20"
-                 FontFamily="Good Times"
-                 Grid.Row="1"
-                 />
-        
         <TextBox x:Name="textBoxData" 
-                 HorizontalAlignment="Center" 
+                 HorizontalAlignment="Left" 
                  VerticalAlignment="Center" 
                  Height="30" 
                  Width="200"
-                 Margin="250,0,0,50" 
                  TextWrapping="Wrap" 
                  VerticalContentAlignment="Center"
                  FontSize="20"
-                 FontFamily="Good Times"
-                 Grid.Row="1"
+                 Grid.Row="2"
+                 Grid.Column="3"
                  />
        
         <Label x:Name="labelData" 
-               Content="Data Entry" 
-               HorizontalAlignment="Center" 
+               Content="Data Entry:" 
+               HorizontalAlignment="Right" 
                VerticalAlignment="Center"
-               Margin="0,0,250,50" 
                FontSize="20"
                FontFamily="Good Times"
-               Grid.Row="1"
+               Grid.Row="2"
+               Grid.Column="1"
                />
         
         <Label x:Name="labelPlan" 
-               Content="Plan" 
-               HorizontalAlignment="Center"
+               Content="Plan:" 
+               HorizontalAlignment="Right"
                VerticalAlignment="Center"
-               Margin="0,0,175,175" 
                FontSize="20"
                FontFamily="Good Times"
                Grid.Row="1"
+               Grid.Column="1"
                />
+        
+        <ComboBox x:Name="comboBoxSPC" 
+                  HorizontalAlignment="Left"  
+                  Grid.Row="1"
+                  Grid.Column="3"
+                  VerticalAlignment="Center" 
+                  Height="30"
+                  Width="200"
+                  IsTextSearchEnabled="True"
+                  ItemsSource="{Binding spcCharts}"
+                  FontSize="20"
+                  />
+
 
     </Grid>
 </Window>

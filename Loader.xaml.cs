@@ -93,7 +93,6 @@ namespace SPC_Tool
 
         }
 
-
         private void MainThread(object sender, DoWorkEventArgs e)
         {
             this.Dispatcher.Invoke(() =>
@@ -119,7 +118,7 @@ namespace SPC_Tool
 
         private void ThreadComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow(permissionLevel, myConnection);
+            MainWindow mainWindow = new MainWindow(permissionLevel, myConnection, full_name);
             this.Close();
             mainWindow.Show();
         }

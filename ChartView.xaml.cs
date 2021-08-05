@@ -131,20 +131,24 @@ namespace SPC_Tool
         {
             SPCData.Clear();
 
-            string sqlstring2 = "SELECT TOP 50 * FROM SPCDatabase WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "' ORDER BY Upload_Date DESC";
-
-            try
+            if(comboChartNames != null)
             {
-                OdbcCommand cmd2 = new OdbcCommand(sqlstring2, myConnection);
-                OdbcDataAdapter adapter2 = new OdbcDataAdapter(cmd2);
-                adapter2.Fill(SPCData);
-            }
-            catch (OdbcException oex)
-            {
-                MessageBox.Show(oex.ToString());
-            }
+                string sqlstring2 = "SELECT TOP 50 * FROM SPCDatabase WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "' ORDER BY Upload_Date DESC";
 
+                try
+                {
+                    OdbcCommand cmd2 = new OdbcCommand(sqlstring2, myConnection);
+                    OdbcDataAdapter adapter2 = new OdbcDataAdapter(cmd2);
+                    adapter2.Fill(SPCData);
+                }
+                catch (OdbcException oex)
+                {
+                    MessageBox.Show(oex.ToString());
+                }
+
+            }
         }
+
 
         public void UpdateGraph()
         {
