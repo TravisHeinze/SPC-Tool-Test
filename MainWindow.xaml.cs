@@ -52,7 +52,7 @@ namespace SPC_Tool
 
         private void ButtonCharts_Click(object sender, RoutedEventArgs e)
         {
-            ChartView ChartWindow = new ChartView(SPCLimits, SPCData, myConnection);
+            ChartView ChartWindow = new ChartView(myConnection);
             ChartWindow.Show();
         }
 

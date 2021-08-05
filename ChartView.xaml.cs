@@ -27,8 +27,14 @@ namespace SPC_Tool
         /// access all all functions.
         /// </ChartVariables>
 
+        //Create Odnc public connection. 
         public OdbcConnection myConnection;
 
+        //Instantiate the datatable variables
+        DataTable spcNames = new DataTable();
+        DataTable SPCData = new DataTable();
+
+        //Line Series format for charts
         public LineSeries spcUCL = new LineSeries
         {
             Title = "UCL",
@@ -73,25 +79,16 @@ namespace SPC_Tool
             StrokeThickness = 4
         };
 
-        DataTable SPCLimits = new DataTable();
-        DataTable SPCData = new DataTable();
-
-        public ChartView(DataTable SPCLimits_Import, DataTable SPCData_Import, OdbcConnection myConnection)
+        public ChartView(OdbcConnection myConnection)
         {
             this.myConnection = myConnection;
-            InitializeComponent();
-            SPCLimits = SPCLimits_Import;
-            SPCData = SPCData_Import;
             CreateDataset();
+            spcPlans();
+            InitializeComponent();
         }
 
         public void CreateDataset()
         {
-            spcCharts = SPCData.AsEnumerable()
-                    .Select(x => x.Field<string>("SPC_Plan"))
-                    .Distinct()
-                    .ToList();
-
             spcUCL.Values = new ChartValues<double> { 4, 4, 4, 4, 4 };
             spcLCL.Values = new ChartValues<double> { 2, 2, 2, 2, 2, };
             spcLSL.Values = new ChartValues<double> { 1, 1, 1, 1, 1, };
@@ -109,18 +106,60 @@ namespace SPC_Tool
             DataContext = this;
         }
 
+        public void spcPlans()
+        {
+            string sqlString = "SELECT DISTINCT SPC_Plan FROM SPCDatabase";
+            try
+            {
+                OdbcCommand cmd = new OdbcCommand(sqlString, myConnection);
+                OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
+                adapter.Fill(spcNames);
+            }
+            catch (OdbcException oex)
+            {
+                MessageBox.Show(oex.ToString());
+                this.Close();
+            }
+
+            spcCharts = spcNames.AsEnumerable()
+                            .Select(x => x.Field<string>("SPC_Plan"))
+                            .ToList();
+
+        }
+
+        public void GetTablesODBC()
+        {
+            SPCData.Clear();
+
+            string sqlstring2 = "SELECT TOP 50 * FROM SPCDatabase WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "' ORDER BY Upload_Date DESC";
+
+            try
+            {
+                OdbcCommand cmd2 = new OdbcCommand(sqlstring2, myConnection);
+                OdbcDataAdapter adapter2 = new OdbcDataAdapter(cmd2);
+                adapter2.Fill(SPCData);
+            }
+            catch (OdbcException oex)
+            {
+                MessageBox.Show(oex.ToString());
+            }
+
+        }
+
         public void UpdateGraph()
         {
+            GetTablesODBC();
+
             var SPC_Data = (from x in SPCData.AsEnumerable()
-                          where x.Field<string>("SPC_Plan") == comboCharts.SelectedItem.ToString()
+                          where x.Field<string>("SPC_Plan") == comboChartNames.SelectedItem.ToString()
                           select new SPC_List_Data
                           {
-                              UCL = double.Parse(x.Field<string>("UCL")),
-                              LCL = double.Parse(x.Field<string>("LCL")),
-                              USL = double.Parse(x.Field<string>("USL")),
-                              LSL = double.Parse(x.Field<string>("LSL")),
-                              CL = double.Parse(x.Field<string>("CL")),
-                              Data = double.Parse(x.Field<string>("Data_Entry"))
+                              UCL = x.Field<double>("UCL"),
+                              LCL = x.Field<double>("LCL"),
+                              USL = x.Field<double>("USL"),
+                              LSL = x.Field<double>("LSL"),
+                              CL = x.Field<double>("CL"),
+                              Data = x.Field<double>("Data_Entry")
                           }).ToList();
 
             spcUCL.Values = new ChartValues<double>(SPC_Data.Select(x => x.UCL).ToList());

@@ -16,7 +16,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
-            <RowDefinition Height="300" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
         <Label x:Name="textTitle" 
@@ -32,12 +32,13 @@
                 Style="{StaticResource HighlightButton}" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
-                Margin="0,0,300,0" 
+                Margin="146,102,446,197" 
                 Width="200"
                 Height="70"
                 FontSize="35"
                 Background="MediumSeaGreen" 
-                Grid.Row="1" Click="ButtonData_Click" 
+                Grid.Row="1" 
+                Click="ButtonData_Click" 
                 />
 
         <Button x:Name="buttonCharts" 
@@ -45,14 +46,15 @@
                 Style="{StaticResource RoundButtoneTemplate}" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
-                Margin="300,0,0,0" 
+                Margin="446,102,146,197" 
                 Width="200"
                 Height="70"
                 FontSize="35"
                 Background="CornflowerBlue" 
-                Grid.Row="1" Click="ButtonCharts_Click" 
+                Grid.Row="1"
+                Click="ButtonCharts_Click" 
                 />
-        
+
         <Button x:Name="buttonPermissions" 
                 Content="Edit Permissions" 
                 Style="{StaticResource HighlightButton}" 
@@ -66,7 +68,20 @@
                 RenderTransformOrigin="0.837,0.021"
                 FontSize="11"
                 />
-       
+
+        <Button x:Name="buttonNewPlan" 
+                Content="Create SPC Chart" 
+                Style="{StaticResource HighlightButton}" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Margin="0,150,0,0" 
+                Width="304"
+                Height="70"
+                FontSize="35"
+                Background="MediumSeaGreen" 
+                Grid.Row="1" 
+                />
+
         <Label x:Name="perm_level" Content="Permission Level: " HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Label x:Name="perm" Content="Admin" HorizontalAlignment="Left" Margin="93,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.286,0.188"/>
 
