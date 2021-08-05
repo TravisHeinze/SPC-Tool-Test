@@ -83,11 +83,11 @@
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OracleDriverLib (Modified)\OracleDriverLib\bin\Debug\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>L:\Temp\Nour R\OracleDriverLib (Modified)\OracleDriverLib\bin\Debug\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="OracleDriverLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\OracleDriverLib (Modified)\OracleDriverLib\bin\Debug\OracleDriverLib.dll</HintPath>
+      <HintPath>L:\Temp\Nour R\OracleDriverLib (Modified)\OracleDriverLib\bin\Debug\OracleDriverLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />

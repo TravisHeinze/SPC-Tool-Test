@@ -28,19 +28,25 @@ namespace SPC_Tool
         DataTable SPCData = new DataTable();
         public OdbcConnection myConnection;
 
-        public MainWindow(bool edit_permissions, OdbcConnection myConnection)
+        public MainWindow(string permissionLevel, OdbcConnection myConnection)
         {
             this.Closing += new System.ComponentModel.CancelEventHandler(Close_Window);
             this.myConnection = myConnection;
             InitializeComponent();
-            if (edit_permissions)
+            if (permissionLevel == "Admin")
             {
-                buttonPermissions.Visibility = Visibility.Visible;
+
                 perm.Content = "Administrator";
+            }
+            else if (permissionLevel == "Engineer")
+            {
+                buttonPermissions.Visibility = Visibility.Hidden;
+                perm.Content = "Engineer";
             }
             else
             {
-                perm.Content = "Engineer";
+                buttonPermissions.Visibility = Visibility.Hidden;
+                perm.Content = "Basic";
             }
         }
 

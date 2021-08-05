@@ -30,10 +30,8 @@ namespace SPC_Tool
         DataTable SPCLimits = new DataTable(); 
         DataTable SPCData = new DataTable();
         public string full_name;
-        bool edit_permissions = false;
-        OdbcConnection myConnection = new OdbcConnection(connString);
-        public static string connString = @"Driver={Microsoft Access Driver (*.mdb, *.accdb)};" +
-        @"Dbq=\\tekfs6.central.tektronix.net\wce\Maxtek\mxt-dept\MfgCommon\SPC Tool\Database\SPCDatabase.accdb; Uid=Admin; Pwd=;";
+        string permissionLevel = null;
+        OdbcConnection myConnection = new OdbcConnection("DSN=SPC Access Driver");
 
         public Loader()
         {
@@ -71,14 +69,14 @@ namespace SPC_Tool
 
         public void AssignPermissions()
         {
-            DataTable SPCUsers = new DataTable();
-            string user_query = "SELECT * FROM SPCUsers";
+            DataTable sqlPermission = new DataTable();
+            string user_query = "SELECT Permissions FROM SPCUsers WHERE User = '" + full_name + "'";
 
             try
             {
                 OdbcCommand cmd = new OdbcCommand(user_query, myConnection);
                 OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
-                adapter.Fill(SPCUsers);
+                adapter.Fill(sqlPermission);
             }
 
             catch (OdbcException oex)
@@ -86,24 +84,17 @@ namespace SPC_Tool
                 MessageBox.Show(oex.ToString());
             }
 
-            var admins = from row in SPCUsers.AsEnumerable()
-                         where row.Field<string>("Permissions") == "Admin"
-                         select row.Field<string>("User");
-
-            var engineers = from row in SPCUsers.AsEnumerable()
-                            where row.Field<string>("Permissions") == "Engineer"
-                            select row.Field<string>("User");
-
-            SetPermissions(admins, engineers);
-        }
-
-        public void SetPermissions(EnumerableRowCollection<string> admins, EnumerableRowCollection<string> engineers)
-        {
-            if(admins.Contains(full_name))
+            if(sqlPermission.Rows.Count == 0)
             {
-                edit_permissions = true;
+                permissionLevel = "Basic";
             }
+            else
+            {
+                permissionLevel = sqlPermission.Rows[0][0].ToString();
+            }
+
         }
+
 
         private void MainThread(object sender, DoWorkEventArgs e)
         {
@@ -133,7 +124,7 @@ namespace SPC_Tool
 
         private void ThreadComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow(edit_permissions, myConnection);
+            MainWindow mainWindow = new MainWindow(permissionLevel, myConnection);
             this.Close();
             mainWindow.Show();
         }
