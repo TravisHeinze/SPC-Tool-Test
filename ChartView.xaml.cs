@@ -149,7 +149,6 @@ namespace SPC_Tool
             }
         }
 
-
         public void UpdateGraph()
         {
             GetTablesODBC();

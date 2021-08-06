@@ -42,11 +42,11 @@ namespace SPC_Tool
             var SPC_Data = (from x in spcLimits.AsEnumerable()
                             select new SPC_List_Data
                             {
-                                UCL = Convert.ToDouble(x.Field<string>("UCL")),
-                                LCL = Convert.ToDouble(x.Field<string>("LCL")),
-                                USL = Convert.ToDouble(x.Field<string>("USL")),
-                                LSL = Convert.ToDouble(x.Field<string>("LSL")),
-                                CL = Convert.ToDouble(x.Field<string>("CL"))
+                                UCL = x.Field<double>("UCL"),
+                                LCL = x.Field<double>("LCL"),
+                                USL = x.Field<double>("USL"),
+                                LSL = x.Field<double>("LSL"),
+                                CL = x.Field<double>("CL")
                             }).ToArray();
 
 
