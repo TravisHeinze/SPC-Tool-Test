@@ -86,7 +86,7 @@
                 FontSize="35"
                 Background="MediumSeaGreen" 
                 Grid.Row="2" 
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="2" Click="NewChart_Click"
                 />
 
         <Label x:Name="perm_level" Content="Permission Level: " HorizontalAlignment="Left" VerticalAlignment="Top"/>

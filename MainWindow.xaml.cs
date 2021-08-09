@@ -50,6 +50,12 @@ namespace SPC_Tool
             userFullName = userName;
         }
 
+        private void NewChart_Click(object sender, RoutedEventArgs e)
+        {
+            CreateChart CreateWindow = new CreateChart(myConnection, userFullName);
+            CreateWindow.Show();
+        }
+
         private void ButtonCharts_Click(object sender, RoutedEventArgs e)
         {
             ChartView ChartWindow = new ChartView(myConnection);

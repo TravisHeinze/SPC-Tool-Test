@@ -37,33 +37,42 @@ namespace SPC_Tool
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            LimitQuery();
+            double dbl;
+            if (double.TryParse(textBoxData.Text, out dbl))
+            {
 
-            var SPC_Data = (from x in spcLimits.AsEnumerable()
-                            select new SPC_List_Data
-                            {
-                                UCL = x.Field<double>("UCL"),
-                                LCL = x.Field<double>("LCL"),
-                                USL = x.Field<double>("USL"),
-                                LSL = x.Field<double>("LSL"),
-                                CL = x.Field<double>("CL")
-                            }).ToArray();
+                LimitQuery();
+
+                var SPC_Data = (from x in spcLimits.AsEnumerable()
+                                select new SPC_List_Data
+                                {
+                                    UCL = x.Field<double>("UCL"),
+                                    LCL = x.Field<double>("LCL"),
+                                    USL = x.Field<double>("USL"),
+                                    LSL = x.Field<double>("LSL"),
+                                    CL = x.Field<double>("CL")
+                                }).ToArray();
 
 
-            double UCL = SPC_Data.Select(x => x.UCL).First();
-            double LCL = SPC_Data.Select(x => x.LCL).First();
-            double USL = SPC_Data.Select(x => x.USL).First();
-            double LSL = SPC_Data.Select(x => x.LSL).First();
-            double CL = SPC_Data.Select(x => x.CL).First();
-            string entryDate = DateTime.Now.ToString();
+                double UCL = SPC_Data.Select(x => x.UCL).First();
+                double LCL = SPC_Data.Select(x => x.LCL).First();
+                double USL = SPC_Data.Select(x => x.USL).First();
+                double LSL = SPC_Data.Select(x => x.LSL).First();
+                double CL = SPC_Data.Select(x => x.CL).First();
+                string entryDate = DateTime.Now.ToString();
 
-            OdbcCommand comd = myConnection.CreateCommand();
-            comd.CommandText = @"Insert into SPCDatabase(SPC_Plan, Data_Entry, UCL, LCL, USL, LSL, CL, Upload_Date, User)
-                               Values('" + comboBoxSPC.Text + "'," + Convert.ToDouble(textBoxData.Text) + "," +  UCL + "," + LCL + "," + USL + "," + LSL + "," + CL + ",'" + entryDate + "','" + userFullName + "')";
-            comd.Connection = myConnection;
-            comd.ExecuteNonQuery();
-            MessageBox.Show("Data Submitted!");
-            this.Close();
+                OdbcCommand comd = myConnection.CreateCommand();
+                comd.CommandText = @"Insert into SPCDatabase(SPC_Plan, Data_Entry, UCL, LCL, USL, LSL, CL, Upload_Date, User)
+                               Values('" + comboBoxSPC.Text + "'," + Convert.ToDouble(textBoxData.Text) + "," + UCL + "," + LCL + "," + USL + "," + LSL + "," + CL + ",'" + entryDate + "','" + userFullName + "')";
+                comd.Connection = myConnection;
+                comd.ExecuteNonQuery();
+                MessageBox.Show("Data Submitted!");
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Invalid input. Please enter numerical value");
+            }
         }
 
         private void comboBoxPopulate()
