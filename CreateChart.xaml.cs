@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Data.Odbc;
+using System.Data;
 
 namespace SPC_Tool
 {
@@ -22,6 +23,7 @@ namespace SPC_Tool
     {
         private OdbcConnection myConnection;
         string full_name;
+        DataTable spcNames = new DataTable();
 
         #region constructor
         /// <summary>
@@ -41,8 +43,30 @@ namespace SPC_Tool
         private bool Verify_Input()
         {
             double dbl;
+            string plan_query = "SELECT DISTINCT SPC_Plan FROM SPCDatabase";
+            bool unique_planName = true;
 
-            if (double.TryParse(ucl.Text, out dbl) && double.TryParse(lcl.Text, out dbl) && double.TryParse(usl.Text, out dbl) && double.TryParse(lsl.Text, out dbl) && double.TryParse(cl.Text, out dbl) && double.TryParse(data_entry.Text, out dbl))
+            try
+            {
+                OdbcCommand cmd = new OdbcCommand(plan_query, myConnection);
+                OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
+                adapter.Fill(spcNames);
+            }
+            catch (OdbcException oex)
+            {
+                MessageBox.Show(oex.ToString());
+                this.Close();
+            }
+
+            for(int i = 0; i < spcNames.Rows.Count; i++)
+            {
+                if(spcNames.Rows[i][0].ToString() == plan_name.Text)
+                {
+                    unique_planName = false;
+                }
+            }
+
+            if (double.TryParse(ucl.Text, out dbl) && double.TryParse(lcl.Text, out dbl) && double.TryParse(usl.Text, out dbl) && double.TryParse(lsl.Text, out dbl) && double.TryParse(cl.Text, out dbl) && double.TryParse(data_entry.Text, out dbl) && unique_planName)
             {
                 return true;
             }
@@ -64,7 +88,7 @@ namespace SPC_Tool
             }
             else
             {
-                MessageBox.Show("Invalid input detected. Please enter appropriate values for all fields. Make sure all fields are filled.");
+                MessageBox.Show("Invalid input detected. Please enter appropriate values for all fields. Make sure all fields are filled and the plan name is unique.");
             }
         }
     }
