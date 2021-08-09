@@ -24,11 +24,10 @@ namespace SPC_Tool
 
     public partial class MainWindow : Window
     {
-        DataTable SPCLimits = new DataTable();
-        DataTable SPCData = new DataTable();
         public OdbcConnection myConnection;
+        public string userFullName;
 
-        public MainWindow(string permissionLevel, OdbcConnection myConnection)
+        public MainWindow(string permissionLevel, OdbcConnection myConnection, string userName)
         {
             this.Closing += new System.ComponentModel.CancelEventHandler(Close_Window);
             this.myConnection = myConnection;
@@ -48,17 +47,24 @@ namespace SPC_Tool
                 buttonPermissions.Visibility = Visibility.Hidden;
                 perm.Content = "Basic";
             }
+            userFullName = userName;
+        }
+
+        private void NewChart_Click(object sender, RoutedEventArgs e)
+        {
+            CreateChart CreateWindow = new CreateChart(myConnection, userFullName);
+            CreateWindow.Show();
         }
 
         private void ButtonCharts_Click(object sender, RoutedEventArgs e)
         {
-            ChartView ChartWindow = new ChartView(SPCLimits, SPCData, myConnection);
+            ChartView ChartWindow = new ChartView(myConnection);
             ChartWindow.Show();
         }
 
         private void ButtonData_Click(object sender, RoutedEventArgs e)
         {
-            DataEntry DataWindow = new DataEntry(myConnection);
+            DataEntry DataWindow = new DataEntry(myConnection, userFullName);
             DataWindow.Show();
         }
 

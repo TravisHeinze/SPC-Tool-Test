@@ -6,31 +6,36 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:SPC_Tool"
         mc:Ignorable="d"
-        Title="Chart View" Height="584" Width="706" WindowStartupLocation="CenterOwner">
-    
-    <Grid>
-        <Border BorderBrush="Black" 
-                BorderThickness="1" 
-                HorizontalAlignment="Left" 
-                Height="439" 
-                Width="663"
-                Margin="10,86,0,0" 
-                VerticalAlignment="Top" 
-                >
-            <lvc:CartesianChart x:Name="spcChart1" Series="{Binding DataCollection}" DisableAnimations="True">
+        Title="Chart View" Height="600" Width="800" WindowStartupLocation="CenterOwner">
+
+    <Border Padding="10">
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <lvc:CartesianChart x:Name="spcChart1" 
+                                Series="{Binding DataCollection}" 
+                                DisableAnimations="True"
+                                Grid.Row ="1"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                >
             </lvc:CartesianChart>
-        </Border>
 
-        <ComboBox x:Name="comboCharts" 
-                  HorizontalAlignment="Left" 
-                  VerticalAlignment="Top" 
-                  Margin="233,44,0,0" 
-                  Width="195" 
-                  Height="23" 
-                  ItemsSource="{Binding spcCharts}"
-                  IsTextSearchEnabled ="True"
-                  IsEditable="True"
-                  SelectionChanged="ComboDataSets_SelectionChanged"/>
+            <ComboBox x:Name="comboChartNames" 
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center" 
+                      Width="200" 
+                      Height="25" 
+                      ItemsSource="{Binding spcCharts}"
+                      IsTextSearchEnabled ="True"
+                      SelectionChanged="ComboDataSets_SelectionChanged"
+                      />
 
-    </Grid>
+        </Grid>
+    </Border>
+  
 </Window>

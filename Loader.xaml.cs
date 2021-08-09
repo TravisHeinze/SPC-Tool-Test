@@ -27,8 +27,6 @@ namespace SPC_Tool
     {
         public MainWindow mainWindow;
         BackgroundWorker main_thread;
-        DataTable SPCLimits = new DataTable(); 
-        DataTable SPCData = new DataTable();
         public string full_name;
         string permissionLevel = null;
         OdbcConnection myConnection = new OdbcConnection("DSN=SPC Access Driver");
@@ -95,7 +93,6 @@ namespace SPC_Tool
 
         }
 
-
         private void MainThread(object sender, DoWorkEventArgs e)
         {
             this.Dispatcher.Invoke(() =>
@@ -105,9 +102,6 @@ namespace SPC_Tool
                     myConnection.Open();
                     AssignPermissions();
                     VerifyDriver();
-                    //InitializeComponent();
-                    //this.Show();
-                    GetTablesODBC(SPCLimits, SPCData);
                 }
                 else
                 {
@@ -124,7 +118,7 @@ namespace SPC_Tool
 
         private void ThreadComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow(permissionLevel, myConnection);
+            MainWindow mainWindow = new MainWindow(permissionLevel, myConnection, full_name);
             this.Close();
             mainWindow.Show();
         }
@@ -152,26 +146,6 @@ namespace SPC_Tool
                 CreateDSN();
             }
 
-        }
-
-        public void GetTablesODBC(DataTable SPCLimits, DataTable SPCData)
-        {
-            string sqlString = "SELECT * FROM SPCLimits";
-            string sqlstring2 = "SELECT * FROM SPCDatabase";
-
-            try
-            {
-                OdbcCommand cmd = new OdbcCommand(sqlString, myConnection);
-                OdbcCommand cmd2 = new OdbcCommand(sqlstring2, myConnection);
-                OdbcDataAdapter adapter = new OdbcDataAdapter(cmd);
-                OdbcDataAdapter adapter2 = new OdbcDataAdapter(cmd2);
-                adapter.Fill(SPCLimits);
-                adapter2.Fill(SPCData);
-            }
-            catch(OdbcException oex)
-            {
-                MessageBox.Show(oex.ToString());
-            }
         }
 
         public void CreateDSN()

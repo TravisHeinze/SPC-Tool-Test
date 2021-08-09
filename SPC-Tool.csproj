@@ -114,6 +114,9 @@
     <Compile Include="AccessOperations.xaml.cs">
       <DependentUpon>AccessOperations.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CreateChart.xaml.cs">
+      <DependentUpon>CreateChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataEntry.xaml.cs">
       <DependentUpon>DataEntry.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
       <DependentUpon>RemoveUser.xaml</DependentUpon>
     </Compile>
     <Page Include="AccessOperations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
