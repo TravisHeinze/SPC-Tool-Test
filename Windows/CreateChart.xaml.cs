@@ -58,15 +58,15 @@ namespace SPC_Tool
                 this.Close();
             }
 
-            for(int i = 0; i < spcNames.Rows.Count; i++)
+            for (int i = 0; i < spcNames.Rows.Count; i++)
             {
-                if(spcNames.Rows[i][0].ToString() == plan_name.Text)
+                if (spcNames.Rows[i][0].ToString() == plan_name.Text)
                 {
                     unique_planName = false;
                 }
             }
 
-            if (double.TryParse(ucl.Text, out dbl) && double.TryParse(lcl.Text, out dbl) && double.TryParse(usl.Text, out dbl) && double.TryParse(lsl.Text, out dbl) && double.TryParse(cl.Text, out dbl) && double.TryParse(data_entry.Text, out dbl) && unique_planName)
+            if (double.TryParse(ucl.Text, out dbl) && double.TryParse(lcl.Text, out dbl) && double.TryParse(usl.Text, out dbl) && double.TryParse(lsl.Text, out dbl) && double.TryParse(cl.Text, out dbl) && double.TryParse(rule1.Text, out dbl) && double.TryParse(rule2.Text, out dbl) && double.TryParse(rule3.Text, out dbl) && unique_planName)
             {
                 return true;
             }
@@ -78,12 +78,13 @@ namespace SPC_Tool
         {
             if (Verify_Input())
             {
-                string date = DateTime.Now.ToString();
+                string updateDate = DateTime.Now.ToString();
                 OdbcCommand comd = myConnection.CreateCommand();
-                comd.CommandText = @"Insert into SPCLimits(SPC_Plan, Data_Entry, UCL, LCL, USL, LSL, CL, Upload_Date, User)
-                               Values('" + plan_name.Text + "'," + Convert.ToDouble(data_entry.Text) + "," + ucl.Text + "," + lcl.Text + "," + usl.Text + "," + lsl.Text + "," + cl.Text + ",'" + date + "','" + full_name + "')";
+                comd.CommandText = "INSERT INTO SPCLimits([SPC_Plan], [UCL], [LCL], [USL], [LSL], [CL], [Rule 1], [Rule 2], [Rule 3], [Date_Updated], [User])";
+                comd.CommandText += $"VALUES('{plan_name.Text}', {ucl.Text}, {lcl.Text}, {usl.Text}, {lsl.Text}, {cl.Text}, {rule1.Text}, {rule2.Text}, {rule3.Text}, '{updateDate}', '{full_name}')";
                 comd.Connection = myConnection;
                 comd.ExecuteNonQuery();
+                MessageBox.Show("Plan Submitted!");
                 this.Close();
             }
             else
