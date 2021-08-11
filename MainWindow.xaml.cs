@@ -45,6 +45,7 @@ namespace SPC_Tool
             else
             {
                 buttonPermissions.Visibility = Visibility.Hidden;
+                buttonNewPlan.Visibility = Visibility.Hidden;
                 perm.Content = "Basic";
             }
             userFullName = userName;
