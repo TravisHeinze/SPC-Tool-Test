@@ -23,6 +23,7 @@
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch"
                                 >
+
             </lvc:CartesianChart>
 
             <ComboBox x:Name="comboChartNames" 
