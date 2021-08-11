@@ -111,38 +111,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AccessOperations.xaml.cs">
+    <Compile Include="UserPerms\AccessOperations.xaml.cs">
       <DependentUpon>AccessOperations.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CreateChart.xaml.cs">
+    <Compile Include="Windows\CreateChart.xaml.cs">
       <DependentUpon>CreateChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataEntry.xaml.cs">
+    <Compile Include="Windows\DataEntry.xaml.cs">
       <DependentUpon>DataEntry.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChartView.xaml.cs">
+    <Compile Include="Windows\ChartView.xaml.cs">
       <DependentUpon>ChartView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Installer1.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Installer1.Designer.cs">
-      <DependentUpon>Installer1.cs</DependentUpon>
     </Compile>
     <Compile Include="Loader.xaml.cs">
       <DependentUpon>Loader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ModifyPermissions.xaml.cs">
+    <Compile Include="UserPerms\ModifyPermissions.xaml.cs">
       <DependentUpon>ModifyPermissions.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RemoveUser.xaml.cs">
+    <Compile Include="UserPerms\RemoveUser.xaml.cs">
       <DependentUpon>RemoveUser.xaml</DependentUpon>
     </Compile>
-    <Page Include="AccessOperations.xaml">
+    <Page Include="UserPerms\AccessOperations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CreateChart.xaml">
+    <Page Include="Windows\CreateChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,11 +152,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="DataEntry.xaml">
+    <Page Include="Windows\DataEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ChartView.xaml">
+    <Page Include="Windows\ChartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -170,21 +164,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ModifyPermissions.xaml">
+    <Page Include="UserPerms\ModifyPermissions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="NewUser.xaml">
+    <Page Include="UserPerms\NewUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RemoveUser.xaml">
+    <Page Include="UserPerms\RemoveUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NewUser.xaml.cs">
+    <Compile Include="UserPerms\NewUser.xaml.cs">
       <DependentUpon>NewUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
