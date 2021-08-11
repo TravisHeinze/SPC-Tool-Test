@@ -43,7 +43,7 @@ namespace SPC_Tool
         private bool Verify_Input()
         {
             double dbl;
-            string plan_query = "SELECT DISTINCT SPC_Plan FROM SPCDatabase";
+            string plan_query = "SELECT DISTINCT SPC_Plan FROM SPCLimits";
             bool unique_planName = true;
 
             try
@@ -80,7 +80,7 @@ namespace SPC_Tool
             {
                 string date = DateTime.Now.ToString();
                 OdbcCommand comd = myConnection.CreateCommand();
-                comd.CommandText = @"Insert into SPCDatabase(SPC_Plan, Data_Entry, UCL, LCL, USL, LSL, CL, Upload_Date, User)
+                comd.CommandText = @"Insert into SPCLimits(SPC_Plan, Data_Entry, UCL, LCL, USL, LSL, CL, Upload_Date, User)
                                Values('" + plan_name.Text + "'," + Convert.ToDouble(data_entry.Text) + "," + ucl.Text + "," + lcl.Text + "," + usl.Text + "," + lsl.Text + "," + cl.Text + ",'" + date + "','" + full_name + "')";
                 comd.Connection = myConnection;
                 comd.ExecuteNonQuery();

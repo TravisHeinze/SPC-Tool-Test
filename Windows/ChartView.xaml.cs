@@ -101,6 +101,8 @@ namespace SPC_Tool
 
             //Initialze form and show
             InitializeComponent();
+
+            Rule1(1, 1);
         }
 
         #endregion
@@ -258,6 +260,32 @@ namespace SPC_Tool
             spcLSL.Values = new ChartValues<double>(SPC_Data.Select(x => x.LSL).ToList());
             spcCenterLine.Values = new ChartValues<double>(SPC_Data.Select(x => x.CL).ToList());
             spcDataSet.Values = new ChartValues<double>(SPC_Data.Select(x => x.Data).ToList());
+        }
+
+        public void Rule1(int x, int y)
+        {
+            int count = 1;
+            double[] data_entries = new double[spcDataSet.ActualValues.Count];
+            spcDataSet.ActualValues.CopyTo(data_entries, 0);
+
+            for(int i = 0; i < data_entries.Length; i++)
+            {
+                if(((double.Parse(spcDataSet.ActualValues[i].ToString()) > double.Parse(spcUCL.ActualValues[i].ToString())) || (double.Parse(spcDataSet.ActualValues[i].ToString()) < double.Parse(spcLCL.ActualValues[i].ToString()))) && ((double.Parse(spcDataSet.ActualValues[i + 1].ToString()) > double.Parse(spcUCL.ActualValues[i + 1].ToString())) || (double.Parse(spcDataSet.ActualValues[i + 1].ToString()) < double.Parse(spcLCL.ActualValues[i + 1].ToString()))))
+                {
+                    count++;
+                }
+                else
+                {
+                    count = 1;
+                }
+
+            }
+
+            if(count >= 5)
+            {
+                MessageBox.Show("Out of control");
+            }
+
         }
 
         #endregion
