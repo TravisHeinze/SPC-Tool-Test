@@ -29,6 +29,8 @@ namespace SPC_Tool
         //Instantiate the datatable variables
         DataTable spcNames = new DataTable();
         DataTable SPCData = new DataTable();
+        DataTable SPCRules = new DataTable();
+        DataTable spcCL = new DataTable();
 
         #endregion
 
@@ -102,7 +104,6 @@ namespace SPC_Tool
             //Initialze form and show
             InitializeComponent();
 
-            Rule1(1, 1);
         }
 
         #endregion
@@ -189,7 +190,7 @@ namespace SPC_Tool
             if(comboChartNames != null)
             {
                 //set Query string to select top 50 items from the selected comboBox name. Order by newest dates. 
-                string sqlstring2 = "SELECT TOP 50 * FROM SPCDatabase WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "' ORDER BY Upload_Date DESC";
+                string sqlstring2 = "SELECT TOP 50 * FROM SPCDatabase WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "' ORDER BY Upload_date DESC";
 
                 //Try catch for Odbc query
                 try
@@ -262,28 +263,199 @@ namespace SPC_Tool
             spcDataSet.Values = new ChartValues<double>(SPC_Data.Select(x => x.Data).ToList());
         }
 
-        public void Rule1(int x, int y)
+        #endregion
+
+        #region Rules
+
+        /// <summary>
+        /// Ruleset implementations
+        /// </summary>
+        public void Rule1()
         {
+            SPCRules.Clear();
+
+            int y;
+            string query = "SELECT [Rule 1] FROM SPCLimits WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "'";
+            OdbcCommand cmd = new OdbcCommand(query, myConnection);
+            OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
+            adpt.Fill(SPCRules);
+
+            int x = (int)SPCRules.Rows[0][0];
+
+            if (x > 1)
+            {
+                y = (2 * x) - 1;
+            }
+            else
+            {
+                y = 1;
+            }
+
             int count = 1;
+            int inner_idx = y;
+            double[] data_entries = new double[spcDataSet.ActualValues.Count];
+            spcDataSet.ActualValues.CopyTo(data_entries, 0);
+
+            for (int i = 0; i < data_entries.Length; i++)
+            {
+                for (int j = i; j < inner_idx; j++)
+                {
+                    if (j < data_entries.Length)
+                    {
+                        if ((double.Parse(spcDataSet.ActualValues[j].ToString()) > double.Parse(spcUCL.ActualValues[j].ToString())) || (double.Parse(spcDataSet.ActualValues[j].ToString()) < double.Parse(spcLCL.ActualValues[j].ToString())))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count >= x)
+                {
+                    MessageBox.Show("Rule 1: Out of control");
+                    break;
+                }
+
+                count = 1;
+            }
+
+        }
+
+        public void Rule2()
+        {
+            SPCRules.Clear();
+
+            string query = "SELECT [Rule 2] FROM SPCLimits WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "'";
+            OdbcCommand cmd = new OdbcCommand(query, myConnection);
+            OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
+            adpt.Fill(SPCRules);
+
+            int x = 0;
+
+            for (int i = 0; i < SPCRules.Rows.Count; i++)
+            {
+                for (int j = 0; j < SPCRules.Columns.Count; j++)
+                {
+                    if (SPCRules.Rows[i][j].ToString() != "")
+                    {
+                        x = int.Parse(SPCRules.Rows[i][j].ToString());
+                    }
+                }
+            }
+
+            int count = 0;
+
+            double[] data_entries = new double[spcDataSet.ActualValues.Count];
+            spcDataSet.ActualValues.CopyTo(data_entries, 0);
+
+            for(int i = 1; i < data_entries.Length; i++)
+            {
+                if(double.Parse(spcDataSet.ActualValues[i].ToString()) > double.Parse(spcDataSet.ActualValues[i - 1].ToString()))
+                {
+                    count++;
+                    if(count >= x)
+                    {
+                        MessageBox.Show("Rule 2 - Ascending: Out of Control");
+                        break;
+                    }
+                }
+                else
+                {
+                    count = 0;
+                }
+            }
+
+            count = 0;
+
+            for (int i = 1; i < data_entries.Length; i++)
+            {
+                if (double.Parse(spcDataSet.ActualValues[i].ToString()) < double.Parse(spcDataSet.ActualValues[i - 1].ToString()))
+                {
+                    count++;
+                    if (count >= x)
+                    {
+                        MessageBox.Show("Rule 2 - Descending: Out of Control");
+                        break;
+                    }
+                }
+                else
+                {
+                    count = 0;
+                }
+            }
+
+        }
+
+        public void Rule3()
+        {
+            string query = "SELECT [Rule 3] FROM SPCLimits WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "'";
+            OdbcCommand cmd = new OdbcCommand(query, myConnection);
+            OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
+            adpt.Fill(SPCRules);
+
+            string query2 = "SELECT [CL] FROM SPCLimits WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "'";
+            OdbcCommand cmd2 = new OdbcCommand(query2, myConnection);
+            OdbcDataAdapter adpt2 = new OdbcDataAdapter(cmd2);
+            adpt2.Fill(spcCL);
+
+            int x = 0;
+
+            for (int i = 0; i < SPCRules.Rows.Count; i++)
+            {
+                for (int j = 0; j < SPCRules.Columns.Count; j++)
+                {
+                    if (SPCRules.Rows[i][j].ToString() != "")
+                    {
+                        x = int.Parse(SPCRules.Rows[i][j].ToString());
+                    }
+                }
+            }
+
+            double CL = double.Parse(spcCL.Rows[0][0].ToString());
+            int count = 0;
+
             double[] data_entries = new double[spcDataSet.ActualValues.Count];
             spcDataSet.ActualValues.CopyTo(data_entries, 0);
 
             for(int i = 0; i < data_entries.Length; i++)
             {
-                if(((double.Parse(spcDataSet.ActualValues[i].ToString()) > double.Parse(spcUCL.ActualValues[i].ToString())) || (double.Parse(spcDataSet.ActualValues[i].ToString()) < double.Parse(spcLCL.ActualValues[i].ToString()))) && ((double.Parse(spcDataSet.ActualValues[i + 1].ToString()) > double.Parse(spcUCL.ActualValues[i + 1].ToString())) || (double.Parse(spcDataSet.ActualValues[i + 1].ToString()) < double.Parse(spcLCL.ActualValues[i + 1].ToString()))))
+                for(int j = i; j < x; j++)
                 {
-                    count++;
-                }
-                else
-                {
-                    count = 1;
+                    if(double.Parse(spcDataSet.ActualValues[j].ToString()) > CL)
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        count = 0;
+                    }
                 }
 
-            }
+                if (count >= x)
+                {
+                    MessageBox.Show("Rule 3: Above center line");
+                    break;
+                }
 
-            if(count >= 5)
-            {
-                MessageBox.Show("Out of control");
+                count = 0;
+
+                for (int j = i; j < x; j++)
+                {
+                    if (double.Parse(spcDataSet.ActualValues[j].ToString()) < CL)
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        count = 0;
+                    }
+                }
+
+                if (count >= x)
+                {
+                    MessageBox.Show("Rule 3: Below center line");
+                    break;
+                }
+
             }
 
         }
@@ -300,6 +472,9 @@ namespace SPC_Tool
         private void ComboDataSets_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateGraph();
+            Rule1();
+            Rule2();
+            Rule3();
         }
 
         #endregion
