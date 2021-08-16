@@ -78,7 +78,7 @@ namespace SPC_Tool
         private void comboBoxPopulate()
         {
 
-            string sqlString = "SELECT DISTINCT SPC_Plan FROM SPCLimits";
+            string sqlString = "SELECT DISTINCT SPC_Plan FROM SPCLimits WHERE [Status] = 'Active'";
             try
             {
                 OdbcCommand cmd = new OdbcCommand(sqlString, myConnection);

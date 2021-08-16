@@ -25,6 +25,8 @@
         <TextBox x:Name="Rule1_Text" HorizontalAlignment="Left" Height="23" Margin="340,181,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="61"/>
         <TextBox x:Name="Rule3_Text" HorizontalAlignment="Left" Height="23" Margin="340,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="61"/>
         <Button Content="Submit" HorizontalAlignment="Left" Margin="369,298,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <TextBlock x:Name="Status_Text" HorizontalAlignment="Left" Margin="28,298,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBox2" HorizontalAlignment="Left" Margin="76,295,0,0" VerticalAlignment="Top" Width="103"/>
 
     </Grid>
 </Window>

@@ -50,11 +50,14 @@ namespace SPC_Tool
             {
                 comboBox1.Items.Add(item);
             }
+
+            comboBox2.Items.Add("Active");
+            comboBox2.Items.Add("Inactive");
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string update_query = $"UPDATE [SPCLimits] SET [UCL] = ?, [LCL] = ?, [USL] = ?, [LSL] = ?, [CL] = ?, [Rule 1] = ?, [Rule 2] = ?, [Rule 3] = ?, [User] = '{full_name}', [Date_Updated] = '{DateTime.Now}' WHERE [SPC_Plan] = '{comboBox1.SelectedItem}'";
+            string update_query = $"UPDATE [SPCLimits] SET [UCL] = ?, [LCL] = ?, [USL] = ?, [LSL] = ?, [CL] = ?, [Rule 1] = ?, [Rule 2] = ?, [Rule 3] = ?, [User] = '{full_name}', [Date_Updated] = '{DateTime.Now}', [Status] = '{comboBox2.SelectedItem}' WHERE [SPC_Plan] = '{comboBox1.SelectedItem}'";
             OdbcCommand cmd = new OdbcCommand(update_query, myConnection);
 
             cmd.Parameters.AddWithValue("@UCL", OdbcType.Double).Value = double.Parse(UCL_Text.Text);
@@ -109,6 +112,10 @@ namespace SPC_Tool
                        where row.Field<string>("SPC_Plan") == comboBox1.SelectedItem.ToString()
                        select row.Field<int>("Rule 3")).FirstOrDefault();
 
+            var status = (from row in dt.AsEnumerable()
+                         where row.Field<string>("SPC_Plan") == comboBox1.SelectedItem.ToString()
+                         select row.Field<string>("Status")).FirstOrDefault();
+
             UCL_Text.Text = UCL.ToString();
             LCL_Text.Text = LCL.ToString();
             USL_Text.Text = USL.ToString();
@@ -117,6 +124,7 @@ namespace SPC_Tool
             Rule1_Text.Text = Rule1.ToString();
             Rule2_Text.Text = Rule2.ToString();
             Rule3_Text.Text = Rule3.ToString();
+            comboBox2.SelectedItem = status;
 
         }
 

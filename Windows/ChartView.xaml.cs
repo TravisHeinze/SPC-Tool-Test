@@ -149,7 +149,7 @@ namespace SPC_Tool
         public void spcPlans()
         {
             //Query string to select unique SPC plans
-            string sqlString = "SELECT DISTINCT SPC_Plan FROM SPCDatabase";
+            string sqlString = "SELECT DISTINCT SPC_Plan FROM SPCLimits WHERE [Status] = 'Active'";
 
             //Try catch to run the query
             try
