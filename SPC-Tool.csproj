@@ -111,6 +111,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Windows\EditCharts.xaml.cs">
+      <DependentUpon>EditCharts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserPerms\AccessOperations.xaml.cs">
       <DependentUpon>AccessOperations.xaml</DependentUpon>
     </Compile>
@@ -132,6 +135,10 @@
     <Compile Include="UserPerms\RemoveUser.xaml.cs">
       <DependentUpon>RemoveUser.xaml</DependentUpon>
     </Compile>
+    <Page Include="Windows\EditCharts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserPerms\AccessOperations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

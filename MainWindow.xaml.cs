@@ -81,5 +81,10 @@ namespace SPC_Tool
             Application.Current.Shutdown();
         }
 
+        private void buttonEdit_Charts_Click(object sender, RoutedEventArgs e)
+        {
+            EditCharts editCharts = new EditCharts(myConnection, userFullName);
+            editCharts.Show();
+        }
     }
 }
