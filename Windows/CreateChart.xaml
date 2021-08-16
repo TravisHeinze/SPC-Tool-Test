@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SPC_Tool"
         mc:Ignorable="d"
-        Title="CreateChart" Height="268.8" Width="423.2">
+        Title="CreateChart" Height="335.2" Width="429.6">
     <StackPanel>
-        <Grid>
+        <Grid Height="294" Margin="0,0,0.2,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="386*"/>
                 <ColumnDefinition Width="165*"/>
@@ -18,17 +18,21 @@
             <Label Content="USL:" HorizontalAlignment="Left" Margin="109,105,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.238,0.586"/>
             <Label Content="LSL:" HorizontalAlignment="Left" Margin="112,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.132,0.523"/>
             <Label Content="CL:" HorizontalAlignment="Left" Margin="117,167,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.594,0.555"/>
-            <Label Content="Data Entry:" HorizontalAlignment="Left" Margin="75,196,0,0" VerticalAlignment="Top"/>
+            <Label Content="Rule 1:" HorizontalAlignment="Left" Margin="98,197,0,0" VerticalAlignment="Top"/>
             <TextBox x:Name="plan_name" HorizontalAlignment="Left" Height="23" Margin="184,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
             <TextBox x:Name="ucl" HorizontalAlignment="Left" Height="23" Margin="184,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
             <TextBox x:Name="lcl" HorizontalAlignment="Left" Height="23" Margin="184,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
             <TextBox x:Name="usl" HorizontalAlignment="Left" Height="23" Margin="184,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
             <TextBox x:Name="lsl" HorizontalAlignment="Left" Height="23" Margin="184,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
             <TextBox x:Name="cl" HorizontalAlignment="Left" Height="23" Margin="184,171,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.467,6.948" Grid.ColumnSpan="2"/>
-            <TextBox x:Name="data_entry" HorizontalAlignment="Left" Height="23" Margin="184,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
-            <Button Content="Submit" Grid.Column="1" HorizontalAlignment="Left" Margin="40,207,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+            <TextBox x:Name="rule1" HorizontalAlignment="Left" Height="23" Margin="184,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+            <Button Content="Submit" Grid.Column="1" HorizontalAlignment="Left" Margin="41.2,275,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+            <Label Content="Rule 2:" HorizontalAlignment="Left" Margin="98,228,0,0" VerticalAlignment="Top"/>
+            <Label Content="Rule 3:" HorizontalAlignment="Left" Margin="98,259,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="rule2" HorizontalAlignment="Left" Height="23" Margin="184,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" RenderTransformOrigin="0.493,2.183"/>
+            <TextBox x:Name="rule3" HorizontalAlignment="Left" Height="23" Margin="184,261,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
 
         </Grid>
     </StackPanel>
-   
+
 </Window>
