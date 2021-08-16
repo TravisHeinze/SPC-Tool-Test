@@ -30,7 +30,6 @@ namespace SPC_Tool
         DataTable spcNames = new DataTable();
         DataTable SPCData = new DataTable();
         DataTable SPCRules = new DataTable();
-        //DataTable spcCL = new DataTable();
 
         public string rules_query;
 
