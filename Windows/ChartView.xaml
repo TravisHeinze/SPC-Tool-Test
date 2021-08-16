@@ -35,8 +35,12 @@
                       IsTextSearchEnabled ="True"
                       SelectionChanged="ComboDataSets_SelectionChanged"
                       />
+            <TextBlock x:Name="Rule1_Label" HorizontalAlignment="Left" Margin="520,0,0,0" TextWrapping="Wrap" Text="Rule 1: OUT OF CONTROL" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold" Visibility="Hidden"/>
+            <TextBlock x:Name="Rule2_Label_Asc" HorizontalAlignment="Left" Margin="520,25,0,0" TextWrapping="Wrap" Text="Rule 2 - Ascending: OUT OF CONTROL" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold" Visibility="Hidden"/>
+            <TextBlock x:Name="Rule3_Label" HorizontalAlignment="Left" Margin="520,75,0,0" TextWrapping="Wrap" Text="Rule 3: OUT OF CONTROL" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold" Visibility="Hidden"/>
+            <TextBlock x:Name="Rule2_Label_Desc" HorizontalAlignment="Left" Margin="520,50,0,0" TextWrapping="Wrap" Text="Rule 2 - Descending: OUT OF CONTROL" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold" Visibility="Hidden"/>
 
         </Grid>
     </Border>
-  
+
 </Window>

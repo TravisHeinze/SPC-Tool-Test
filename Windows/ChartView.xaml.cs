@@ -312,6 +312,7 @@ namespace SPC_Tool
 
                 if (count >= x)
                 {
+                    Rule1_Label.Visibility = Visibility.Visible;
                     MessageBox.Show("Rule 1: Out of control");
                     break;
                 }
@@ -333,6 +334,7 @@ namespace SPC_Tool
                     count++;
                     if(count >= x)
                     {
+                        Rule2_Label_Asc.Visibility = Visibility.Visible;
                         MessageBox.Show("Rule 2 - Ascending: Out of Control");
                         break;
                     }
@@ -352,6 +354,7 @@ namespace SPC_Tool
                     count++;
                     if (count >= x)
                     {
+                        Rule2_Label_Desc.Visibility = Visibility.Visible;
                         MessageBox.Show("Rule 2 - Descending: Out of Control");
                         break;
                     }
@@ -388,6 +391,7 @@ namespace SPC_Tool
 
                 if (abv_count >= x)
                 {
+                    Rule3_Label.Visibility = Visibility.Visible;
                     MessageBox.Show("Rule 3: Above center line");
                     break;
                 }
@@ -406,6 +410,7 @@ namespace SPC_Tool
 
                 if (bel_count >= x)
                 {
+                    Rule3_Label.Visibility = Visibility.Visible;
                     MessageBox.Show("Rule 3: Below center line");
                     break;
                 }
