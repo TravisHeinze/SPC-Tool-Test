@@ -30,7 +30,9 @@ namespace SPC_Tool
         DataTable spcNames = new DataTable();
         DataTable SPCData = new DataTable();
         DataTable SPCRules = new DataTable();
-        DataTable spcCL = new DataTable();
+        //DataTable spcCL = new DataTable();
+
+        public string rules_query;
 
         #endregion
 
@@ -103,7 +105,6 @@ namespace SPC_Tool
 
             //Initialze form and show
             InitializeComponent();
-
         }
 
         #endregion
@@ -270,17 +271,20 @@ namespace SPC_Tool
         /// <summary>
         /// Ruleset implementations
         /// </summary>
-        public void Rule1()
-        {
-            SPCRules.Clear();
+        /// 
 
-            int y;
-            string query = "SELECT [Rule 1] FROM SPCLimits WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "'";
-            OdbcCommand cmd = new OdbcCommand(query, myConnection);
+        public void FillRulesTable()
+        {
+            rules_query = $"SELECT [Rule 1], [Rule 2], [Rule 3], [CL] FROM SPCLimits WHERE SPC_Plan = '{comboChartNames.SelectedItem.ToString()}'";
+            OdbcCommand cmd = new OdbcCommand(rules_query, myConnection);
             OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
             adpt.Fill(SPCRules);
+        }
 
-            int x = (int)SPCRules.Rows[0][0];
+        public void Rule1()
+        {
+            int y;
+            int x = SPCRules.AsEnumerable().Select(z => z.Field<int>("Rule 1")).FirstOrDefault();
 
             if (x > 1)
             {
@@ -293,14 +297,12 @@ namespace SPC_Tool
 
             int count = 1;
             int inner_idx = y;
-            double[] data_entries = new double[spcDataSet.ActualValues.Count];
-            spcDataSet.ActualValues.CopyTo(data_entries, 0);
 
-            for (int i = 0; i < data_entries.Length; i++)
+            for (int i = 0; i < spcDataSet.ActualValues.Count; i++)
             {
                 for (int j = i; j < inner_idx; j++)
                 {
-                    if (j < data_entries.Length)
+                    if (j < spcDataSet.ActualValues.Count)
                     {
                         if ((double.Parse(spcDataSet.ActualValues[j].ToString()) > double.Parse(spcUCL.ActualValues[j].ToString())) || (double.Parse(spcDataSet.ActualValues[j].ToString()) < double.Parse(spcLCL.ActualValues[j].ToString())))
                         {
@@ -322,34 +324,12 @@ namespace SPC_Tool
 
         public void Rule2()
         {
-            SPCRules.Clear();
-
-            string query = "SELECT [Rule 2] FROM SPCLimits WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "'";
-            OdbcCommand cmd = new OdbcCommand(query, myConnection);
-            OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
-            adpt.Fill(SPCRules);
-
-            int x = 0;
-
-            for (int i = 0; i < SPCRules.Rows.Count; i++)
-            {
-                for (int j = 0; j < SPCRules.Columns.Count; j++)
-                {
-                    if (SPCRules.Rows[i][j].ToString() != "")
-                    {
-                        x = int.Parse(SPCRules.Rows[i][j].ToString());
-                    }
-                }
-            }
-
+            int x = SPCRules.AsEnumerable().Select(z => z.Field<int>("Rule 2")).FirstOrDefault();
             int count = 0;
 
-            double[] data_entries = new double[spcDataSet.ActualValues.Count];
-            spcDataSet.ActualValues.CopyTo(data_entries, 0);
-
-            for(int i = 1; i < data_entries.Length; i++)
+            for(int i = 0; i < spcDataSet.ActualValues.Count - 1; i++)
             {
-                if(double.Parse(spcDataSet.ActualValues[i].ToString()) > double.Parse(spcDataSet.ActualValues[i - 1].ToString()))
+                if(double.Parse(spcDataSet.ActualValues[i].ToString()) < double.Parse(spcDataSet.ActualValues[i + 1].ToString()))
                 {
                     count++;
                     if(count >= x)
@@ -366,9 +346,9 @@ namespace SPC_Tool
 
             count = 0;
 
-            for (int i = 1; i < data_entries.Length; i++)
+            for (int i = 0; i < spcDataSet.ActualValues.Count - 1; i++)
             {
-                if (double.Parse(spcDataSet.ActualValues[i].ToString()) < double.Parse(spcDataSet.ActualValues[i - 1].ToString()))
+                if (double.Parse(spcDataSet.ActualValues[i].ToString()) > double.Parse(spcDataSet.ActualValues[i + 1].ToString()))
                 {
                     count++;
                     if (count >= x)
@@ -387,70 +367,45 @@ namespace SPC_Tool
 
         public void Rule3()
         {
-            string query = "SELECT [Rule 3] FROM SPCLimits WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "'";
-            OdbcCommand cmd = new OdbcCommand(query, myConnection);
-            OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
-            adpt.Fill(SPCRules);
+            int x = SPCRules.AsEnumerable().Select(z => z.Field<int>("Rule 3")).FirstOrDefault();
+            double CL = SPCRules.AsEnumerable().Select(z => z.Field<double>("CL")).FirstOrDefault();
 
-            string query2 = "SELECT [CL] FROM SPCLimits WHERE SPC_Plan = '" + comboChartNames.SelectedItem.ToString() + "'";
-            OdbcCommand cmd2 = new OdbcCommand(query2, myConnection);
-            OdbcDataAdapter adpt2 = new OdbcDataAdapter(cmd2);
-            adpt2.Fill(spcCL);
+            int abv_count = 0;
+            int bel_count = 0;
 
-            int x = 0;
-
-            for (int i = 0; i < SPCRules.Rows.Count; i++)
-            {
-                for (int j = 0; j < SPCRules.Columns.Count; j++)
-                {
-                    if (SPCRules.Rows[i][j].ToString() != "")
-                    {
-                        x = int.Parse(SPCRules.Rows[i][j].ToString());
-                    }
-                }
-            }
-
-            double CL = double.Parse(spcCL.Rows[0][0].ToString());
-            int count = 0;
-
-            double[] data_entries = new double[spcDataSet.ActualValues.Count];
-            spcDataSet.ActualValues.CopyTo(data_entries, 0);
-
-            for(int i = 0; i < data_entries.Length; i++)
+            for(int i = 0; i < spcDataSet.ActualValues.Count; i++)
             {
                 for(int j = i; j < x; j++)
                 {
                     if(double.Parse(spcDataSet.ActualValues[j].ToString()) > CL)
                     {
-                        count++;
+                        abv_count++;
                     }
                     else
                     {
-                        count = 0;
+                        abv_count = 0;
                     }
                 }
 
-                if (count >= x)
+                if (abv_count >= x)
                 {
                     MessageBox.Show("Rule 3: Above center line");
                     break;
                 }
 
-                count = 0;
-
                 for (int j = i; j < x; j++)
                 {
                     if (double.Parse(spcDataSet.ActualValues[j].ToString()) < CL)
                     {
-                        count++;
+                        bel_count++;
                     }
                     else
                     {
-                        count = 0;
+                        bel_count = 0;
                     }
                 }
 
-                if (count >= x)
+                if (bel_count >= x)
                 {
                     MessageBox.Show("Rule 3: Below center line");
                     break;
@@ -472,6 +427,7 @@ namespace SPC_Tool
         private void ComboDataSets_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateGraph();
+            FillRulesTable();
             Rule1();
             Rule2();
             Rule3();
