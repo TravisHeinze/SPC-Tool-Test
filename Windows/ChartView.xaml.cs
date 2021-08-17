@@ -8,6 +8,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Data.Odbc;
 using LiveCharts.Configurations;
+using System;
 
 namespace SPC_Tool
 {
@@ -149,7 +150,7 @@ namespace SPC_Tool
         public void spcPlans()
         {
             //Query string to select unique SPC plans
-            string sqlString = "SELECT DISTINCT SPC_Plan FROM SPCDatabase";
+            string sqlString = "SELECT DISTINCT SPC_Plan FROM SPCLimits WHERE [Status] = 'Active'";
 
             //Try catch to run the query
             try
@@ -313,7 +314,7 @@ namespace SPC_Tool
                 if (count >= x)
                 {
                     Rule1_Label.Visibility = Visibility.Visible;
-                    MessageBox.Show("Rule 1: Out of control");
+                    //MessageBox.Show("Rule 1: Out of control");
                     break;
                 }
 
@@ -335,7 +336,7 @@ namespace SPC_Tool
                     if(count >= x)
                     {
                         Rule2_Label_Asc.Visibility = Visibility.Visible;
-                        MessageBox.Show("Rule 2 - Ascending: Out of Control");
+                        //MessageBox.Show("Rule 2 - Ascending: Out of Control");
                         break;
                     }
                 }
@@ -355,7 +356,7 @@ namespace SPC_Tool
                     if (count >= x)
                     {
                         Rule2_Label_Desc.Visibility = Visibility.Visible;
-                        MessageBox.Show("Rule 2 - Descending: Out of Control");
+                        //MessageBox.Show("Rule 2 - Descending: Out of Control");
                         break;
                     }
                 }
@@ -392,7 +393,7 @@ namespace SPC_Tool
                 if (abv_count >= x)
                 {
                     Rule3_Label.Visibility = Visibility.Visible;
-                    MessageBox.Show("Rule 3: Above center line");
+                    //MessageBox.Show("Rule 3: Above center line");
                     break;
                 }
 
@@ -411,12 +412,49 @@ namespace SPC_Tool
                 if (bel_count >= x)
                 {
                     Rule3_Label.Visibility = Visibility.Visible;
-                    MessageBox.Show("Rule 3: Below center line");
+                    //MessageBox.Show("Rule 3: Below center line");
                     break;
                 }
 
             }
 
+        }
+
+        #endregion
+
+        #region Mean and Standard Deviation
+        
+        /// <summary>
+        /// Calculate and display mean and standard deviation of the last 3 months of data
+        /// </summary>
+
+        public void GetStats()
+        {
+            mean_label.Text = "Mean: ";
+            sd_label.Text = "Standard Deviation: ";
+
+            DateTime three_months = DateTime.Now.AddMonths(-3);
+
+            var recent_data = (from row in SPCData.AsEnumerable()
+                       where row.Field<string>("SPC_Plan") == comboChartNames.SelectedItem.ToString()
+                       && DateTime.Compare(row.Field<DateTime>("Upload_Date"), three_months) > 0
+                       select row.Field<double>("Data_Entry")).ToList();
+
+            double avg = recent_data.Average();
+            double sum_of_squares = recent_data.Select(val => (val - avg) * (val - avg)).Sum();
+            double SD = Math.Sqrt(sum_of_squares / recent_data.Count);
+
+            mean_label.Text += avg.ToString("F");
+            sd_label.Text += SD.ToString("F");
+
+        }
+
+        public void ResetLabels()
+        {
+            Rule1_Label.Visibility = Visibility.Hidden;
+            Rule2_Label_Asc.Visibility = Visibility.Hidden;
+            Rule2_Label_Desc.Visibility = Visibility.Hidden;
+            Rule3_Label.Visibility = Visibility.Hidden;
         }
 
         #endregion
@@ -432,9 +470,11 @@ namespace SPC_Tool
         {
             UpdateGraph();
             FillRulesTable();
+            ResetLabels();
             Rule1();
             Rule2();
             Rule3();
+            GetStats();
         }
 
         #endregion
