@@ -42,7 +42,7 @@
             FontFamily="Good Times"
             Grid.Column="3"
             Grid.Row="0"
-               Margin="0,6.5"
+               Margin="0.4,3,0,10.2"
                />
 
         <Button x:Name="buttonSubmit" 
@@ -85,7 +85,7 @@
                  Grid.Row="2"
                  Grid.Column="3"
                  />
-       
+
         <Label x:Name="labelData" 
                Content="Data Entry:" 
                HorizontalAlignment="Right" 
@@ -95,7 +95,7 @@
                Grid.Row="2"
                Grid.Column="1"
                />
-        
+
         <Label x:Name="labelPlan" 
                Content="Plan:" 
                HorizontalAlignment="Right"
@@ -105,7 +105,7 @@
                Grid.Row="1"
                Grid.Column="1"
                />
-        
+
         <ComboBox x:Name="comboBoxSPC" 
                   HorizontalAlignment="Left"  
                   Grid.Row="1"
@@ -115,8 +115,9 @@
                   Width="200"
                   IsTextSearchEnabled="True"
                   ItemsSource="{Binding spcCharts}"
-                  FontSize="20"
+                  FontSize="20" SelectionChanged="comboBoxSPC_SelectionChanged"
                   />
+        <DataGrid x:Name="entry_grid" Grid.Column="1" HorizontalAlignment="Left" Height="51" Margin="83.6,9.6,0,0" Grid.Row="2" VerticalAlignment="Top" Width="593" Grid.ColumnSpan="3"/>
 
 
     </Grid>
