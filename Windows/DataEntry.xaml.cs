@@ -37,6 +37,7 @@ namespace SPC_Tool
             FillTable();
             comboBoxPopulate();
             InitializeComponent();
+            entry_grid.Visibility = Visibility.Hidden;
             //entry_grid.CanUserAddRows = false;
             //entry_grid.CanUserDeleteRows = false;
             //entry_grid.CanUserReorderColumns = false;
@@ -155,7 +156,10 @@ namespace SPC_Tool
                 
 
                 MessageBox.Show("Data Submitted!");
-                this.Close();
+            ChartView chartView = new ChartView(myConnection, comboBoxSPC.Text);
+            chartView.Show();
+            //create new view chart with combobox populated
+            this.Close();
             //}
 
             //else
@@ -232,6 +236,7 @@ namespace SPC_Tool
             //entrySource.Clear();
             entrySource.Columns.Clear();
             entry_grid.ItemsSource = null;
+            entry_grid.Visibility = Visibility.Visible;
             FillDatagrid();
             FitToContent();
         }
