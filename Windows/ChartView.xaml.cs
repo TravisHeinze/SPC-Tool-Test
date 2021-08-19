@@ -92,7 +92,7 @@ namespace SPC_Tool
         /// Standard constuctor
         /// </summary>
         /// <param name="myConnection">Odbc connection passed from main </param>
-        public ChartView(OdbcConnection myConnection)
+        public ChartView(OdbcConnection myConnection, string comboFill = null)
         {
             //set this froms SQL connection to passed connection from main
             this.myConnection = myConnection;
@@ -105,6 +105,12 @@ namespace SPC_Tool
 
             //Initialze form and show
             InitializeComponent();
+
+            if(comboFill != null)
+            {
+                comboChartNames.SelectedItem = comboFill;
+            }
+
         }
 
         #endregion

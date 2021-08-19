@@ -27,6 +27,8 @@
         <Button Content="Submit" HorizontalAlignment="Left" Margin="369,298,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <TextBlock x:Name="Status_Text" HorizontalAlignment="Left" Margin="28,298,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top"/>
         <ComboBox x:Name="comboBox2" HorizontalAlignment="Left" Margin="76,295,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBlock x:Name="mean_label_e" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Mean: " VerticalAlignment="Top"/>
+        <TextBlock x:Name="sd_label_e" HorizontalAlignment="Left" Margin="10,31,0,0" TextWrapping="Wrap" Text="Standard Deviation: " VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

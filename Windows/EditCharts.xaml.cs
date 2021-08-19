@@ -23,23 +23,29 @@ namespace SPC_Tool
     {
         public OdbcConnection myConnection;
         public DataTable dt = new DataTable();
+        public DataTable data_entries = new DataTable();
         string full_name;
 
         public EditCharts(OdbcConnection myConnection, string full_name)
         {
             this.full_name = full_name;
             this.myConnection = myConnection;
-            FillTable();
+            FillTables();
             InitializeComponent();
             FillComboBox();
         }
 
-        public void FillTable()
+        public void FillTables()
         {
             string query = "SELECT * FROM SPCLimits";
             OdbcCommand cmd = new OdbcCommand(query, myConnection);
             OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
             adpt.Fill(dt);
+
+            string query2 = "SELECT * FROM SPCDatabase";
+            OdbcCommand cmd2 = new OdbcCommand(query2, myConnection);
+            OdbcDataAdapter adpt2 = new OdbcDataAdapter(cmd2);
+            adpt2.Fill(data_entries);
         }
 
         public void FillComboBox()
@@ -125,6 +131,29 @@ namespace SPC_Tool
             Rule2_Text.Text = Rule2.ToString();
             Rule3_Text.Text = Rule3.ToString();
             comboBox2.SelectedItem = status;
+
+            GetStats();
+
+        }
+
+        public void GetStats()
+        {
+            mean_label_e.Text = "Mean: ";
+            sd_label_e.Text = "Standard Deviation: ";
+
+            DateTime three_months = DateTime.Now.AddMonths(-3);
+
+            var recent_data = (from row in data_entries.AsEnumerable()
+                               where row.Field<string>("SPC_Plan") == comboBox1.SelectedItem.ToString()
+                               && DateTime.Compare(row.Field<DateTime>("Upload_Date"), three_months) > 0
+                               select row.Field<double>("Data_Entry")).ToList();
+
+            double avg = recent_data.Average();
+            double sum_of_squares = recent_data.Select(val => (val - avg) * (val - avg)).Sum();
+            double SD = Math.Sqrt(sum_of_squares / recent_data.Count);
+
+            mean_label_e.Text += avg.ToString("F");
+            sd_label_e.Text += SD.ToString("F");
 
         }
 
