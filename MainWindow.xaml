@@ -11,8 +11,9 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="397*" />
+            <ColumnDefinition Width="252*" />
+            <ColumnDefinition Width="145*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -27,7 +28,7 @@
                HorizontalAlignment="Center" 
                VerticalAlignment="Center"
                FontFamily="Good Times"
-               Grid.ColumnSpan="2"
+               Grid.ColumnSpan="2" Margin="242,15,96.8,15"
                />
 
         <Button x:Name="buttonData" 
@@ -35,7 +36,7 @@
                 Style="{StaticResource HighlightButton}" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
-                Margin="93,57,103.8,57.8" 
+                Margin="93,57,103.8,58.6" 
                 Width="200"
                 Height="70"
                 FontSize="35"
@@ -50,14 +51,14 @@
                 Style="{StaticResource HighlightButton}" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
-                Margin="0,0,0,0" 
+                Margin="98.2,58,98.6,57.6" 
                 Width="200"
                 Height="70"
                 FontSize="35"
                 Background="CornflowerBlue" 
                 Grid.Row="1"
                 Grid.Column="1"
-                Click="ButtonCharts_Click" 
+                Click="ButtonCharts_Click" Grid.ColumnSpan="2" 
                 />
 
         <Button x:Name="buttonPermissions" 
@@ -65,14 +66,14 @@
                 Style="{StaticResource HighlightButton}" 
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Top" 
-                Margin="0,0,0,0" 
+                Margin="0,0,-0.4,0" 
                 Width="90"
                 Height="39"
                 Background="MediumSeaGreen" 
                 Click="ButtonPermissions_Click" 
                 RenderTransformOrigin="0.837,0.021"
                 FontSize="11"
-                Grid.Column="1"
+                Grid.Column="2"
                 />
 
         <Button x:Name="buttonNewPlan" 
@@ -80,12 +81,12 @@
                 Style="{StaticResource HighlightButton}" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 
-                Margin="98.2,58.2,98.6,57.4" 
+                Margin="98.2,58.4,98.6,57.2" 
                 Width="200"
                 Height="70"
                 FontSize="25"
                 Background="MediumSeaGreen" 
-                Grid.Row="2" Click="NewChart_Click" Grid.Column="1" RenderTransformOrigin="0.658,0.531"
+                Grid.Row="2" Click="NewChart_Click" Grid.Column="1" RenderTransformOrigin="0.658,0.531" Grid.ColumnSpan="2"
                 />
 
         <Label x:Name="perm_level" Content="Permission Level: " HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -101,6 +102,19 @@
             FontSize="35"
             Background="CornflowerBlue" 
             Grid.Row="2" Click="buttonEdit_Charts_Click" 
+                />
+        <Button x:Name="buttonDashboard" 
+            Content="Top Charts Dashboard" 
+            Style="{StaticResource HighlightButton}" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Top" 
+            Margin="0,46,-0.4,0" 
+            Width="90"
+            Height="39"
+            Background="MediumSeaGreen" 
+            RenderTransformOrigin="0.837,0.021"
+            FontSize="8"
+            Grid.Column="2" Click="buttonDashboard_Click"
                 />
 
     </Grid>

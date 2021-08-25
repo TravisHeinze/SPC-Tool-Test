@@ -145,6 +145,7 @@ namespace SPC_Tool
                 //MessageBox.Show(entrySource.Rows[0][i].ToString());
                 sum += double.Parse(entrySource.Rows[0][i].ToString());
             }
+
             avg = sum / entry_grid.Columns.Count;
 
                     OdbcCommand comd = myConnection.CreateCommand();
