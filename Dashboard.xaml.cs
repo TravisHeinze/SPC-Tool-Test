@@ -526,6 +526,11 @@ namespace SPC_Tool
             Rule2(spcDataSet4, SPCRules4, Rule2_Label_Asc_4, Rule2_Label_Desc_4);
             Rule3(spcDataSet4, SPCRules4, Rule3_Label_4);
 
+            //Mean and SD
+            GetStats(mean_label_1, sd_label_1, 0);
+            GetStats(mean_label_2, sd_label_2, 1);
+            GetStats(mean_label_3, sd_label_3, 2);
+            GetStats(mean_label_4, sd_label_4, 3);
 
         }
 
@@ -742,6 +747,37 @@ namespace SPC_Tool
         }
 
         #endregion
+
+
+        public void GetStats(Label mean_label, Label sd_label, int plan_num)
+        {
+            SPCData.Clear();
+            string query = "SELECT * FROM SPCDatabase";
+            OdbcCommand cmd = new OdbcCommand(query, myConnection);
+            OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
+            adpt.Fill(SPCData);
+
+            var names = (from row in SPCLimits.AsEnumerable()
+                         select row.Field<string>("SPC_Plan")).ToList();
+
+            mean_label.Content = "Mean: ";
+            sd_label.Content = "Standard Deviation: ";
+
+            DateTime three_months = DateTime.Now.AddMonths(-3);
+
+            var recent_data = (from row in SPCData.AsEnumerable()
+                               where row.Field<string>("SPC_Plan") == names.ElementAt(plan_num).ToString()
+                               && DateTime.Compare(row.Field<DateTime>("Upload_Date"), three_months) > 0
+                               select row.Field<double>("Data_Entry")).ToList();
+
+            double avg = recent_data.Average();
+            double sum_of_squares = recent_data.Select(val => (val - avg) * (val - avg)).Sum();
+            double SD = Math.Sqrt(sum_of_squares / recent_data.Count);
+
+            mean_label.Content += avg.ToString("F");
+            sd_label.Content += SD.ToString("F");
+
+        }
 
 
     }

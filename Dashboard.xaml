@@ -60,5 +60,13 @@
         <Label x:Name="Title2" Content="Title2" HorizontalAlignment="Left" Margin="956,77,0,0" VerticalAlignment="Top" FontSize="20"/>
         <Label x:Name="Title3" Content="Title3" HorizontalAlignment="Left" Margin="339,394,0,0" VerticalAlignment="Top" FontSize="20"/>
         <Label x:Name="Title4" Content="Title4" HorizontalAlignment="Left" Margin="956,394,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Label x:Name="mean_label_1" Content="Mean: " HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" FontSize="15"/>
+        <Label x:Name="sd_label_1" Content="Standard Deviation: " HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" FontSize="15"/>
+        <Label x:Name="mean_label_2" Content="Mean: " HorizontalAlignment="Left" Margin="1093,39,0,0" VerticalAlignment="Top" FontSize="15"/>
+        <Label x:Name="sd_label_2" Content="Standard Deviation: " HorizontalAlignment="Left" Margin="1093,69,0,0" VerticalAlignment="Top" FontSize="15"/>
+        <Label x:Name="mean_label_3" Content="Mean: " HorizontalAlignment="Left" Margin="13,368,0,0" VerticalAlignment="Top" FontSize="15"/>
+        <Label x:Name="sd_label_3" Content="Standard Deviation: " HorizontalAlignment="Left" Margin="13,396,0,0" VerticalAlignment="Top" FontSize="15"/>
+        <Label x:Name="mean_label_4" Content="Mean: " HorizontalAlignment="Left" Margin="1093,375,0,0" VerticalAlignment="Top" FontSize="15"/>
+        <Label x:Name="sd_label_4" Content="Standard Deviation: " HorizontalAlignment="Left" Margin="1093,405,0,0" VerticalAlignment="Top" FontSize="15"/>
     </Grid>
 </Window>
