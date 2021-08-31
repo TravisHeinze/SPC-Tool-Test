@@ -221,12 +221,10 @@ namespace SPC_Tool
         {
             this.myConnection = myConnection;
             CreateDataset();
-            //FillRulesTable();
             InitializeComponent();
             HideLabels();
             FillRulesTables();
             GetTopCharts();
-            //FillRulesTables();
         }
 
         public void HideLabels()
@@ -327,11 +325,6 @@ namespace SPC_Tool
 
         public void GetTopCharts()
         {
-           /* string query = "SELECT TOP 4 * FROM SPCLimits WHERE [Status] = 'Active' ORDER BY [Date_Updated] DESC;";
-            OdbcCommand cmd = new OdbcCommand(query, myConnection);
-            OdbcDataAdapter adpt = new OdbcDataAdapter(cmd);
-            adpt.Fill(SPCLimits);*/
-
             var names = (from row in SPCLimits.AsEnumerable()
                          select row.Field<string>("SPC_Plan")).ToList();
 
@@ -509,6 +502,12 @@ namespace SPC_Tool
             spcCenterLine4.Values = new ChartValues<double>(SPC_Data4.Select(x => x.CL).ToList());
             spcDataSet4.Values = new ChartValues<double>(SPC_Data4.Select(x => x.Data).ToList());
 
+            GenerateDashboard();
+
+        }
+
+        public void GenerateDashboard()
+        {
             //Call Rules
             Rule1(spcDataSet, spcUCL, spcLCL, SPCRules1, Rule1_Label_1);
             Rule2(spcDataSet, SPCRules1, Rule2_Label_Asc_1, Rule2_Label_Desc_1);
@@ -531,7 +530,6 @@ namespace SPC_Tool
             GetStats(mean_label_2, sd_label_2, 1);
             GetStats(mean_label_3, sd_label_3, 2);
             GetStats(mean_label_4, sd_label_4, 3);
-
         }
 
         #region LiveChart Bindings
@@ -564,11 +562,6 @@ namespace SPC_Tool
             var names = (from row in SPCLimits.AsEnumerable()
                          select row.Field<string>("SPC_Plan")).ToList();
 
-            /*for (int i = 0; i < 4; i++)
-            {
-                MessageBox.Show(names.ElementAt(i));
-            }*/
-
             string rules_query1 = $"SELECT [Rule 1], [Rule 2], [Rule 3], [CL] FROM SPCLimits WHERE SPC_Plan = '{names.ElementAt(0).ToString()}'";
             OdbcCommand cmd1 = new OdbcCommand(rules_query1, myConnection);
             OdbcDataAdapter adpt1 = new OdbcDataAdapter(cmd1);
@@ -598,19 +591,8 @@ namespace SPC_Tool
 
         public void Rule1(LineSeries dataset, LineSeries UCL, LineSeries LCL, DataTable SPCRules, Label label)
         {
-            //MessageBox.Show(UCL.ActualValues[0].ToString(), LCL.ActualValues[0].ToString());
             int y;
             int x = SPCRules.AsEnumerable().Select(z => z.Field<int>("Rule 1")).FirstOrDefault();
-
-            //MessageBox.Show(x.ToString());
-
-            /*for(int i = 0; i < SPCRules.Rows.Count; i++)
-            {
-                for (int j = 0; j < SPCRules.Columns.Count; j++)
-                {
-                    MessageBox.Show(SPCRules.Rows[i][j].ToString());
-                }
-            }*/
 
             if (x > 1)
             {
@@ -640,7 +622,6 @@ namespace SPC_Tool
                 if (count >= x)
                 {
                     label.Visibility = Visibility.Visible;
-                    //MessageBox.Show("Rule 1: Out of control");
                     break;
                 }
 
@@ -662,7 +643,6 @@ namespace SPC_Tool
                     if (count >= x)
                     {
                         label_a.Visibility = Visibility.Visible;
-                        //MessageBox.Show("Rule 2 - Ascending: Out of Control");
                         break;
                     }
                 }
@@ -682,7 +662,6 @@ namespace SPC_Tool
                     if (count >= x)
                     {
                         label_b.Visibility = Visibility.Visible;
-                        //MessageBox.Show("Rule 2 - Descending: Out of Control");
                         break;
                     }
                 }
@@ -719,7 +698,6 @@ namespace SPC_Tool
                 if (abv_count >= x)
                 {
                     label.Visibility = Visibility.Visible;
-                    //MessageBox.Show("Rule 3: Above center line");
                     break;
                 }
 
@@ -738,7 +716,6 @@ namespace SPC_Tool
                 if (bel_count >= x)
                 {
                     label.Visibility = Visibility.Visible;
-                    //MessageBox.Show("Rule 3: Below center line");
                     break;
                 }
 
@@ -779,7 +756,5 @@ namespace SPC_Tool
 
         }
 
-
     }
 }
-
