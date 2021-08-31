@@ -86,5 +86,11 @@ namespace SPC_Tool
             EditCharts editCharts = new EditCharts(myConnection, userFullName);
             editCharts.Show();
         }
+
+        private void buttonDashboard_Click(object sender, RoutedEventArgs e)
+        {
+            Dashboard dashboard = new Dashboard(myConnection);
+            dashboard.Show();
+        }
     }
 }
