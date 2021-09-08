@@ -685,7 +685,7 @@ namespace SPC_Tool
             {
                 for (int j = i; j < x; j++)
                 {
-                    if (double.Parse(dataset.ActualValues[j].ToString()) > CL)
+                    if (j < spcDataSet.ActualValues.Count && double.Parse(dataset.ActualValues[j].ToString()) > CL)
                     {
                         abv_count++;
                     }
@@ -703,7 +703,7 @@ namespace SPC_Tool
 
                 for (int j = i; j < x; j++)
                 {
-                    if (double.Parse(dataset.ActualValues[j].ToString()) < CL)
+                    if (j < spcDataSet.ActualValues.Count && double.Parse(dataset.ActualValues[j].ToString()) < CL)
                     {
                         bel_count++;
                     }
