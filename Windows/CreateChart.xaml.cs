@@ -23,6 +23,7 @@ namespace SPC_Tool
     {
         private OdbcConnection myConnection;
         string full_name;
+        private string active = "Active";
         DataTable spcNames = new DataTable();
 
         #region constructor
@@ -80,8 +81,8 @@ namespace SPC_Tool
             {
                 string updateDate = DateTime.Now.ToString();
                 OdbcCommand comd = myConnection.CreateCommand();
-                comd.CommandText = "INSERT INTO SPCLimits([SPC_Plan], [UCL], [LCL], [USL], [LSL], [CL], [Rule 1], [Rule 2], [Rule 3], [Date_Updated], [User])";
-                comd.CommandText += $"VALUES('{plan_name.Text}', {ucl.Text}, {lcl.Text}, {usl.Text}, {lsl.Text}, {cl.Text}, {rule1.Text}, {rule2.Text}, {rule3.Text}, '{updateDate}', '{full_name}')";
+                comd.CommandText = "INSERT INTO SPCLimits([SPC_Plan], [UCL], [LCL], [USL], [LSL], [CL], [Rule 1], [Rule 2], [Rule 3], [Number of Entries], [Date_Updated], [User], [Status])";
+                comd.CommandText += $"VALUES('{plan_name.Text}', {ucl.Text}, {lcl.Text}, {usl.Text}, {lsl.Text}, {cl.Text}, {rule1.Text}, {rule2.Text}, {rule3.Text}, {num_entries.Text}, '{updateDate}', '{full_name}', '{active}')";
                 comd.Connection = myConnection;
                 comd.ExecuteNonQuery();
                 MessageBox.Show("Plan Submitted!");

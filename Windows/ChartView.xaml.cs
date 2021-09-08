@@ -33,6 +33,7 @@ namespace SPC_Tool
         DataTable SPCRules = new DataTable();
 
         public string rules_query;
+        private bool cont;
 
         #endregion
 
@@ -244,15 +245,46 @@ namespace SPC_Tool
                               Data = x.Field<double>("Data_Entry")
                           }).ToList();
 
+            cont = true;
+            
             //Set values for mapper limits
-            double sUCL = SPC_Data.Select(x => x.UCL).First();
-            double sLCL = SPC_Data.Select(x => x.LCL).First();
-            double sUSL = SPC_Data.Select(x => x.USL).First();
-            double sLSL = SPC_Data.Select(x => x.LSL).First();
-            double sCL = SPC_Data.Select(x => x.CL).First();
+
+            try
+            {
+                //Set values for mapper limits
+                double sUCL = SPC_Data.Select(x => x.UCL).First();
+                double sLCL = SPC_Data.Select(x => x.LCL).First();
+                double sUSL = SPC_Data.Select(x => x.USL).First();
+                double sLSL = SPC_Data.Select(x => x.LSL).First();
+                double sCL = SPC_Data.Select(x => x.CL).First();
+
+                //Set properties to mapper and set limits
+                Mapper = Mappers.Xy<double>()
+                    .X((item, index) => index)
+                    .Y(item => item)
+                    .Fill(item => item > sUSL || item < sLSL ? DangerBrush : item > sUCL || item < sLCL ? WarningBrush : null)
+                    .Stroke(item => item > sUSL || item < sLSL ? DangerBrush : item > sUCL || item < sLCL ? WarningBrush : null);
+
+                //set mapper to the data set
+                spcDataSet.Configuration = Mapper;
+
+                //Set the values of the chart to the new query return.
+                spcUCL.Values = new ChartValues<double>(SPC_Data.Select(x => x.UCL).ToList());
+                spcLCL.Values = new ChartValues<double>(SPC_Data.Select(x => x.LCL).ToList());
+                spcUSL.Values = new ChartValues<double>(SPC_Data.Select(x => x.USL).ToList());
+                spcLSL.Values = new ChartValues<double>(SPC_Data.Select(x => x.LSL).ToList());
+                spcCenterLine.Values = new ChartValues<double>(SPC_Data.Select(x => x.CL).ToList());
+                spcDataSet.Values = new ChartValues<double>(SPC_Data.Select(x => x.Data).ToList());
+
+            }
+            catch(System.InvalidOperationException)
+            {
+                MessageBox.Show("Chart contains no data");
+                cont = false;
+            }
 
             //Set properties to mapper and set limits
-            Mapper = Mappers.Xy<double>()
+           /* Mapper = Mappers.Xy<double>()
                 .X((item, index) => index)
                 .Y(item => item)
                 .Fill(item => item > sUSL ||  item < sLSL ? DangerBrush : item > sUCL || item < sLCL ? WarningBrush : null)
@@ -267,7 +299,7 @@ namespace SPC_Tool
             spcUSL.Values = new ChartValues<double>(SPC_Data.Select(x => x.USL).ToList());
             spcLSL.Values = new ChartValues<double>(SPC_Data.Select(x => x.LSL).ToList());
             spcCenterLine.Values = new ChartValues<double>(SPC_Data.Select(x => x.CL).ToList());
-            spcDataSet.Values = new ChartValues<double>(SPC_Data.Select(x => x.Data).ToList());
+            spcDataSet.Values = new ChartValues<double>(SPC_Data.Select(x => x.Data).ToList());*/
         }
 
         #endregion
@@ -386,7 +418,8 @@ namespace SPC_Tool
             {
                 for(int j = i; j < x; j++)
                 {
-                    if(double.Parse(spcDataSet.ActualValues[j].ToString()) > CL)
+                    //MessageBox.Show(x.ToString(), j.ToString());
+                    if(j < spcDataSet.ActualValues.Count && double.Parse(spcDataSet.ActualValues[j].ToString()) > CL)
                     {
                         abv_count++;
                     }
@@ -405,7 +438,7 @@ namespace SPC_Tool
 
                 for (int j = i; j < x; j++)
                 {
-                    if (double.Parse(spcDataSet.ActualValues[j].ToString()) < CL)
+                    if (j < spcDataSet.ActualValues.Count && double.Parse(spcDataSet.ActualValues[j].ToString()) < CL)
                     {
                         bel_count++;
                     }
@@ -477,10 +510,13 @@ namespace SPC_Tool
             UpdateGraph();
             FillRulesTable();
             ResetLabels();
-            Rule1();
-            Rule2();
-            Rule3();
-            GetStats();
+            if (cont == true)
+            {
+                Rule1();
+                Rule2();
+                Rule3();
+                GetStats();
+            }
         }
 
         #endregion
